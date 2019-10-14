@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg"
+    tools:context="com.amtzhmt.launcher.login.LoginActivity">
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/loginview"
+        android:layout_centerInParent="true"
+        android:layout_width="640dp"
+        android:layout_height="420dp"
+        android:background="@mipmap/littlebg">
+
+        <TextView
+            android:id="@+id/logintext"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:layout_width="112dp"
+            android:layout_height="40dp"
+            android:text="@string/login"
+            android:textColor="#ffffffff"
+            android:textSize="28sp"  />
+
+        <EditText
+            android:layout_below="@id/logintext"
+            android:drawableLeft="@mipmap/nameicon"
+            android:id="@+id/name_et"
+            android:layout_width="350dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/editseletor"
+            android:paddingLeft="50dp"
+            android:drawablePadding="14dp"
+            android:text="00119389676"
+            android:hint="@string/hintname"
+            android:textColor="@color/whithe"
+            android:textColorHint="@color/hint"
+            android:layout_centerHorizontal="true"
+            android:maxLength="15" />
+
+        <EditText
+            android:layout_below="@id/name_et"
+            android:drawableLeft="@mipmap/pwdicon"
+            android:id="@+id/pwd_et"
+            android:layout_width="350dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/editseletor"
+            android:text="123456"
+            android:paddingLeft="50dp"
+            android:inputType="textPassword"
+            android:drawablePadding="14dp"
+            android:hint="@string/hintpwd"
+            android:textColor="@color/whithe"
+            android:textColorHint="@color/hint"
+            android:layout_centerHorizontal="true"
+            android:maxLength="15" />
+
+        <Button
+            android:background="@drawable/buttonseletor"
+            android:layout_below="@id/pwd_et"
+            android:id="@+id/loginbt"
+            android:text="@string/loginbt"
+            android:textSize="24sp"
+            android:textColor="@color/whithe"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:layout_width="300dp"
+            android:layout_height="45dp" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

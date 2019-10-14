@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">launcher</string>
+    <string name="wait">资源配置中，请稍等…</string>
+    <string name="login">账号登录</string>
+    <string name="hintname">请输入账号</string>
+    <string name="hintpwd">请输入密码</string>
+    <string name="loginbt">登录</string>
+    <string name="connectnet">请连接网络</string>
+    <string name="clickseetings">1. 点击遥控器的“设置”按钮</string>
+    <string name="netsuccess">2. 进入“网络设置”页面配置网络并成功连接</string>
+    <string name="netclickback">3. 点击遥控器的“返回”按钮回到当前页面</string>
+</resources>

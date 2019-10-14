@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="hint">#ff9499cb</color>
+    <color name="blue">#0263F6</color>
+    <color name="whithe">#ffffff</color>
+    <color name="halfwhite">#22000000</color>
+    <color name="fouhalfwhite">#44000000</color>
+    <color name="update_theme_color">#FFFFAC5D</color>
+</resources>

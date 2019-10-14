@@ -1,0 +1,6 @@
+1 onclick 统一在homeactivity 中处理
+2 onfocuse 在每一个对应的toolview中处理 因为真实的控件是在内层 而监听焦点是外层
+3 mvp 模式注意mview 空指针
+4 view 的tag为对应bean类
+5 图片的网络地址的前缀是在每个对应的bean中 加了constant.pichttp
+6 imageviewTool  监听onFocusChange时如果焦点类型为2 那么    去掉默认的焦点框 不要发光焦点框 view.setBackgroundResource(0);

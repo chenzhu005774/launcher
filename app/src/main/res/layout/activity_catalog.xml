@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/t1"
+    android:orientation="vertical"
+    android:id="@+id/catalogroot"
+    tools:context="com.amtzhmt.launcher.catalog.CatalogActivity">
+    <RelativeLayout
+        android:visibility="gone"
+        android:layout_weight="0.2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_margin="30dp"
+            android:textSize="30sp"
+            android:id="@+id/catalogtitle"
+            android:text="君豪酒店"
+            android:textColor="@color/whithe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextClock
+            android:layout_centerVertical="true"
+            android:format12Hour="yyyy.MM.dd\nEE hh:mm"
+            android:textColor="@color/whithe"
+            android:layout_margin="30dp"
+            android:textSize="20sp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:visibility="gone"
+        android:layout_weight="0.7"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <RelativeLayout
+            android:id="@+id/progress_out"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:background="@color/halfwhite"
+            android:layout_width="5dp"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/progress_in"
+                android:layout_marginRight="0.25dp"
+                android:layout_marginLeft="0.25dp"
+                android:layout_centerHorizontal="true"
+                android:background="@color/xupdate_default_theme_color"
+                android:layout_width="3dp"
+                android:layout_height="1dp"></RelativeLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:visibility="gone"
+        android:layout_weight="0.1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"></RelativeLayout>
+
+
+</LinearLayout>
