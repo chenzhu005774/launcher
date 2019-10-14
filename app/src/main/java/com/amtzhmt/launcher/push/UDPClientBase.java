@@ -232,7 +232,6 @@ public abstract class UDPClientBase implements Runnable {
 
         System.out.println("user--->"+username);
 
-
         this.enqueue(msg);
 		worker.wakeup();
 
