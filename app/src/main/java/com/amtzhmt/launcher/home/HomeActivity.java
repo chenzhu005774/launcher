@@ -4,6 +4,7 @@ package com.amtzhmt.launcher.home;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -65,7 +66,7 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
         builder.setPositiveButton("确认" ,  null );
         builder.show();
 
-
+        LogUtils.showsystemDialog("系统弹窗",this,new Handler());
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {

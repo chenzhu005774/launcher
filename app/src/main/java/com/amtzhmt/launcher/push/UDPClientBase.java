@@ -1,6 +1,8 @@
 package com.amtzhmt.launcher.push;
 
 
+import com.amtzhmt.launcher.util.utils.LogUtils;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
@@ -67,8 +69,6 @@ public abstract class UDPClientBase implements Runnable {
 	}
 	
 	protected boolean enqueue(Message message){
-//        String str = new String(message.getData(),5,message.getContentLength());
-//        System.out.println("aaa-->"+new String(message.getData()));
 		boolean result = mq.add(message);
 		if(result == true){
 			queueIn.addAndGet(1);
@@ -99,10 +99,8 @@ public abstract class UDPClientBase implements Runnable {
 		}
 		if(hasNetworkConnection() == true){
 			ds = new DatagramSocket();
-//            ds.setReuseAddress(true);
-//            ds.bind(new InetSocketAddress(12580));
 			ds.connect(new InetSocketAddress(remoteAddress,remotePort));
-            System.out.println("Reuseaddr is enable-->"+ds.getReuseAddress());
+           LogUtils.i("Reuseaddr is enable-->"+ds.getReuseAddress());
 			needReset = false;
 		}else{
 			try{Thread.sleep(1000);}catch(Exception e){}
@@ -114,7 +112,7 @@ public abstract class UDPClientBase implements Runnable {
 			return;
 		}
 		this.init();
-		System.out.println("start login");
+		LogUtils.i("UDP  start login");
 		
 		receiverT = new Thread(this,"udp-client-receiver");
 		receiverT.setDaemon(true);
@@ -204,11 +202,9 @@ public abstract class UDPClientBase implements Runnable {
 		send(uuid);
 	}
 
-
 	
 	private void receiveData() throws Exception{
 		DatagramPacket dp = new DatagramPacket(bufferArray, bufferArray.length);
-
 //		dp.setPort(12580);
 		ds.setSoTimeout(5*1000);
 		ds.receive(dp);
@@ -216,7 +212,6 @@ public abstract class UDPClientBase implements Runnable {
 		if(dp.getLength() <= 0 || dp.getData() == null || dp.getData().length == 0){
 			return;
 		}
-
 
         byte[] data = dp.getData();
         MessageHeader inHeader = MessageHeader.parseHeader(data);
@@ -229,57 +224,17 @@ public abstract class UDPClientBase implements Runnable {
         String username = (use.getUsername().substring(0,lastOf+1));
 
         Message msg = new Message(dp.getSocketAddress(),username);
-
-        System.out.println("user--->"+username);
+		LogUtils.i("user--->"+username);
 
         this.enqueue(msg);
 		worker.wakeup();
 
 
-
-
-//
-//		byte[] data = new byte[dp.getLength()];
-//
-//
-//        System.out.println("port--->"+dp.getSocketAddress());
-//
-//		System.arraycopy(dp.getData(), 0, data, 0, dp.getLength());
-//		Message m = new Message(dp.getSocketAddress(), data);
-//
-//        String str = new String(data,0,data.length, "UTF-8");
-//
-//
-//        System.out.println("checkFormat--->"+str);
-//
-////		if(m.checkFormat() == false){
-////			return;
-////		}
-//		this.receivedPackets++;
-//		this.lastReceived = System.currentTimeMillis();
-//		this.ackServer(m);
-////		if(m.getCmd() == Message.CMD_0x00){
-////			return;
-////		}
-//		this.enqueue(m);
-//		worker.wakeup();
 	}
 	
 	private void ackServer(Message m) throws Exception{
-//		if(m.getCmd() == Message.CMD_0x10){
-//			byte[] buffer = new byte[Message.CLIENT_MESSAGE_MIN_LENGTH];
-//			ByteBuffer.wrap(buffer).put(uuid);
-//			send(buffer);
-//		}
-
-//		if(m.getCmd() == Message.CMD_0x20){
 			byte[] buffer = new byte[Message.CLIENT_MESSAGE_MIN_LENGTH];
-//			ByteBuffer.wrap(buffer).put(uuid);
-//            String data = new String(buffer);
-
-
             send(uuid);
-//		}
 	}
 	
 	private void send(String data) throws Exception{
@@ -293,7 +248,7 @@ public abstract class UDPClientBase implements Runnable {
         MessageHeader messageHeader = new MessageHeader(MessageHeaderInterface.MessageHeaderType.BindingRequest);
 //        String transactionID = data;
         messageHeader.setTransactionID(uuid.getBytes());
-        System.out.println("length--->"+new String(data));
+		LogUtils.i("length--->"+new String(data));
 
 
         MessageAttribute info =new Username(data);
@@ -310,7 +265,7 @@ public abstract class UDPClientBase implements Runnable {
 		ds.send(dp);
 		lastSent = System.currentTimeMillis();
 		this.sentPackets++;
-		System.out.println("ds.getLocalPort()--?"+"--getRemoteSocketAddress-->"+ds.getRemoteSocketAddress());
+		LogUtils.i("ds.getLocalPort()--?"+"--getRemoteSocketAddress-->"+ds.getRemoteSocketAddress());
 	}
 	
 	public long getSentPackets(){

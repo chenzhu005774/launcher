@@ -1,14 +1,18 @@
 package com.amtzhmt.launcher.push;
 
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
+import android.view.WindowManager;
 
 
 /**
@@ -17,6 +21,7 @@ import android.util.Log;
 
 public class clientService extends Service {
     final Context context  = this;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -55,6 +60,11 @@ public class clientService extends Service {
         return START_STICKY;
 
     }
+
+
+
+
+
     public class MyBinder extends Binder {
 
     }

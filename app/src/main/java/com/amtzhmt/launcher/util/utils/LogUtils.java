@@ -1,9 +1,17 @@
 package com.amtzhmt.launcher.util.utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.amtzhmt.launcher.R;
 
 /**
  * 打印log信息类
@@ -156,7 +164,6 @@ public class LogUtils {
 
     /**
      * 显示错误log信息
-     *
      * @param paramString
      */
     public static void e(String paramString) {
@@ -164,10 +171,49 @@ public class LogUtils {
             Log.d("[" + TAG_APP + "]", paramString);
         }
     }
+    /**
+     * 显示系统级别弹窗
+     * @param msg
+     */
+    public static void  showsystemDialog(String  msg, Context context , final Handler handler){
+
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        builder.setMessage(msg);
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // to do
+            }
+        });
+        final android.app.AlertDialog dialog = builder.create();
+        //在dialog show前添加此代码，表示该dialog属于系统dialog。
+        dialog.getWindow().setType((WindowManager.LayoutParams.TYPE_SYSTEM_ALERT));
+        View view = View.inflate(context, R.layout.system_dialog_view, null);
+        TextView tvMsg = (TextView) dialog.findViewById( R.id.dialog_text);
+        tvMsg.setText(msg);
+        dialog.setView(view);
+        new Thread() {
+            public void run() {
+                SystemClock.sleep(2000);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                });
+            };
+        }.start();
+    }
+
 
     /**
      * 显示各种log信息
-     *
      * @param logType= Log.DEBUG/Log.ERROR...
      * @param content
      */

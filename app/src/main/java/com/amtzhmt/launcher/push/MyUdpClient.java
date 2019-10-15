@@ -2,6 +2,7 @@ package com.amtzhmt.launcher.push;
 
 import android.app.Instrumentation;
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 
@@ -12,6 +13,7 @@ import com.google.gson.Gson;
 
 public class MyUdpClient extends UDPClientBase {
  Context context ;
+ final Handler handler = new Handler();
 	public MyUdpClient(String uuid, int appid, String serverAddr, int serverPort,Context context)
 			throws Exception {
 		super(uuid, appid, serverAddr, serverPort);
@@ -28,14 +30,14 @@ public class MyUdpClient extends UDPClientBase {
 	@Override
 	public void onPushMessage(Message message) {
 		if(message == null){
-			System.out.println("msg is null");
+			LogUtils.i( " AMTPush自定义推送信息 msg is null");
 		}
 
 		if(true) {
 			String str = null;
 			str = message.getData();
-			System.out.println("AMTPush自定义推送信息:" + str);
-			LogUtils.showDialog(context,str);
+			LogUtils.i( "AMTPush自定义推送信息:" + str);
+			LogUtils.showsystemDialog(str,context,handler);
 		}
 	}
 
@@ -46,16 +48,13 @@ public class MyUdpClient extends UDPClientBase {
 	}
 
 
-
-
 	/**
 	 * 发送模拟按键的keyCode，服务端进行响应
-	 *
 	 * @param keyCode
 	 *            按键码
 	 */
 	public static void sendKeyEvent(final int keyCode) {
-		Log.d("chenzhu", "收到的键值：" + keyCode);
+		LogUtils.i( "收到的键值：" + keyCode);
 
 		if (keyCode == KeyEvent.KEYCODE_HOME) {
 			returnHome_ADB();
@@ -68,7 +67,7 @@ public class MyUdpClient extends UDPClientBase {
 						Instrumentation inst = new Instrumentation();
 						inst.sendKeyDownUpSync(keyCode);
 					} catch (Exception e) {
-						Log.e("chenzhu", e.toString());
+						LogUtils.i(  e.toString());
 					}
 				}
 			}.start();
@@ -86,15 +85,14 @@ public class MyUdpClient extends UDPClientBase {
 					String keyCommand = "input keyevent " + KeyEvent.KEYCODE_HOME;
 					Runtime runtime = Runtime.getRuntime();
 					Process process = runtime.exec(keyCommand);
-					Log.i("chenzhu", "keyCommand=" + keyCommand);
+					LogUtils.i(  "keyCommand=" + keyCommand);
 				} catch (Exception e) {
-					Log.e("chenzhu", e.toString());
+					LogUtils.i(  e.toString());
 				}
 			}
 		}.start();
 	}
 	public JsonIMMessage getObject(String message) {
-
 		message = OriginalUtil.TripleDES.decrypt(message);
 		Gson gson = new Gson();
 		JsonIMMessage json = null;
