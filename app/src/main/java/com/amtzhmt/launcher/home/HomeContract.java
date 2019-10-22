@@ -1,4 +1,5 @@
 package com.amtzhmt.launcher.home;
+import android.content.Context;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -22,6 +23,7 @@ public class HomeContract {
 
         void  pause();
         void start();
+        void startClien(Context context);
 
     }
 }

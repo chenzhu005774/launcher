@@ -1,7 +1,11 @@
 package com.amtzhmt.launcher;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.multidex.MultiDex;
 
+import com.amtzhmt.launcher.util.utils.LogUtils;
 import com.amtzhmt.launcher.util.utils.ProperTies;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -15,17 +19,32 @@ import java.util.Properties;
  */
 public class App extends Application {
     public static Properties proper ;
+    public static Context context;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
+        context = this;
+//        SharedPreferences pres = getSharedPreferences("config", Context.MODE_PRIVATE);
+//        // 得到共享配置对象保存配置信息
+//        SharedPreferences.Editor editor = pres.edit();
+//        editor.putBoolean("isinstall", false);
+//        // 调用commit方法保存配置信息
+//        editor.commit();
+
+        MultiDex.install(this);
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).threadPriority(Thread.NORM_PRIORITY - 2)
                 .denyCacheImageMultipleSizesInMemory().diskCacheFileNameGenerator(new Md5FileNameGenerator()).diskCacheSize(50 * 1024 * 1024) //缓存 50 Mb
                 .tasksProcessingOrder(QueueProcessingType.LIFO).writeDebugLogs() // Remove for release app
                 .build();
-
         ImageLoader.getInstance().init(config);
 
         proper = ProperTies.getProperties(getApplicationContext());
-        String magin = App. proper.getProperty("magin");
+        String magin = App.proper.getProperty("magin");
+        LogUtils.i("magin:"+magin);
     }
+
+
+
 }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -35,6 +36,7 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
   int channelIndex =0;
   int totalNum =0;
    TextView channelNumtxt;
+   RelativeLayout playcontrollView;
   List<ChannelEntity> channelEntities = new ArrayList<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
         setContentView(R.layout.activity_channelplay);
         channelplay = (MyVideoView)findViewById(R.id.channelplay);
         channelNumtxt= (TextView)findViewById(R.id.channelnumber);
+        playcontrollView =(RelativeLayout)findViewById(R.id.playcontrollView);
         channelplay.setOnErrorListener(this);
         channelplay.setOnPreparedListener(this);
         mPresenter.getChannelNumber();
@@ -70,7 +73,7 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
 
     @Override
     public void controllerView() {
-        channelNumtxt.setVisibility(View.GONE);
+        playcontrollView.setVisibility(View.GONE);
     }
 
     @Override
@@ -108,7 +111,7 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
                     channelIndex=0;
                 }
                 channelplay.setVideoURI(Uri.parse(channelEntities.get(channelIndex).getUrl()));
-                channelNumtxt.setVisibility(View.VISIBLE);
+                playcontrollView.setVisibility(View.VISIBLE);
                 channelNumtxt.setText(channelIndex+1+"");
                 mPresenter.timeSend();
                 return true;
@@ -118,7 +121,7 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
                     channelIndex=totalNum-1;
                 }
                 channelplay.setVideoURI(Uri.parse(channelEntities.get(channelIndex).getUrl()));
-                channelNumtxt.setVisibility(View.VISIBLE);
+                playcontrollView.setVisibility(View.VISIBLE);
                 channelNumtxt.setText(channelIndex+1+"");
                 LogUtils.i("isnull--?"+channelNumtxt);
                 mPresenter.timeSend();

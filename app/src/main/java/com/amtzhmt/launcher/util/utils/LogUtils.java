@@ -1,17 +1,29 @@
 package com.amtzhmt.launcher.util.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amtzhmt.launcher.App;
 import com.amtzhmt.launcher.R;
+import com.amtzhmt.launcher.push.Message;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * 打印log信息类
@@ -23,7 +35,7 @@ public class LogUtils {
      */
     public static final boolean isLogEnabled = true;
     private static final String TAG_APP = "chenzhu";
-
+    private static Thread thread;
     /**
      * 显示调试log信息
      *
@@ -151,13 +163,17 @@ public class LogUtils {
         }
     }
 
-
-    public static void showDialog(Context context,String paramString) {
+    public static void showDialog(Context context,String paramString ,final DialogCallback dialogCallback) {
         if (isLogEnabled) {
             AlertDialog.Builder builder  = new AlertDialog.Builder(context);
             builder.setTitle("提示" ) ;
             builder.setMessage(paramString ) ;
-            builder.setPositiveButton("确认" ,  null );
+            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogCallback.clickSure();
+                }
+            });
             builder.show();
         }
     }
@@ -175,29 +191,24 @@ public class LogUtils {
      * 显示系统级别弹窗
      * @param msg
      */
-    public static void  showsystemDialog(String  msg, Context context , final Handler handler){
-
+    public static void  showsystemDialog(final  String  msg, Context context , final Handler handler){
         final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
         builder.setMessage(msg);
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
             }
         });
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // to do
             }
         });
         final android.app.AlertDialog dialog = builder.create();
         //在dialog show前添加此代码，表示该dialog属于系统dialog。
         dialog.getWindow().setType((WindowManager.LayoutParams.TYPE_SYSTEM_ALERT));
-        View view = View.inflate(context, R.layout.system_dialog_view, null);
-        TextView tvMsg = (TextView) dialog.findViewById( R.id.dialog_text);
-        tvMsg.setText(msg);
-        dialog.setView(view);
+        final   View view = View.inflate(context, R.layout.system_dialog_view, null);
+        dialog.setView(view,0,0,0,0);
         new Thread() {
             public void run() {
                 SystemClock.sleep(2000);
@@ -205,10 +216,54 @@ public class LogUtils {
                     @Override
                     public void run() {
                         dialog.show();
+                        TextView tvMsg = (TextView) dialog.findViewById( R.id.dialog_text);
+                         tvMsg.setText(msg);
                     }
                 });
             };
         }.start();
+    }
+
+    public static void showWindowManagerDialog(Context context){
+        final WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        final  WindowManager.LayoutParams para = new WindowManager.LayoutParams();
+
+        int screenWidth = wm.getDefaultDisplay().getWidth();
+        int screenHeight = wm.getDefaultDisplay().getHeight();
+
+        para.height = (int)(screenHeight*0.8);//WRAP_CONTENT
+        para.width = (int)(screenWidth*0.7);//WRAP_CONTENT
+        para.format = 1;
+        para.flags = WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        para.gravity = Gravity.CENTER;
+        para.type = WindowManager.LayoutParams.TYPE_TOAST;
+        final View contentView = LayoutInflater.from(context).inflate(R.layout.system_dialog_view, null);
+        Button tvDlgBtn = (Button) contentView.findViewById(R.id.dialog_sure);
+        tvDlgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wm.removeView(contentView);
+            }
+        });
+          new Thread() {
+                public void run() {
+                    Looper.prepare();
+                    wm.addView(contentView, para);
+                    Looper.loop();
+                }
+            }.start();
+    }
+
+    public static Activity findActivity(Context context) {
+        if (context instanceof Activity) {
+            return (Activity) context;
+        }
+        if (context instanceof ContextWrapper) {
+            ContextWrapper wrapper = (ContextWrapper) context;
+            return findActivity(wrapper.getBaseContext());
+        } else {
+            return null;
+        }
     }
 
 
@@ -243,5 +298,36 @@ public class LogUtils {
                 break;
             }
         }
+    }
+
+
+
+    /**
+     * Returns a SystemProperty
+     * @param propName The Property to retrieve
+     * @return The Property, or NULL if not found
+     * build.prop
+     */
+    public static String getSystemProperty(String propName) {
+        String line;
+        BufferedReader input = null;
+        try {
+            Process p = Runtime.getRuntime().exec("getprop " + propName);
+            input = new BufferedReader(new InputStreamReader(p.getInputStream()), 1024);
+            line = input.readLine();
+            input.close();
+        } catch (IOException ex) {
+            i( "Unable to read sysprop :" + propName+ex.toString());
+            return null;
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    i( "Exception while closing InputStream"+ e);
+                }
+            }
+        }
+        return line;
     }
 }

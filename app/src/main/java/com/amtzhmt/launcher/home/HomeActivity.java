@@ -1,30 +1,21 @@
 package com.amtzhmt.launcher.home;
-
-
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.catalog.CatalogActivity;
 import com.amtzhmt.launcher.channelplay.ChannelplayActivity;
-import com.amtzhmt.launcher.push.clientService;
 import com.amtzhmt.launcher.util.utils.Constant;
+import com.amtzhmt.launcher.util.utils.DialogCallback;
+import com.amtzhmt.launcher.util.utils.UpdateManager;
 import com.amtzhmt.launcher.util.utils.annima.RotationAnimation;
 import com.amtzhmt.launcher.mvp.MVPBaseActivity;
-
 import com.amtzhmt.launcher.util.utils.LogUtils;
 import com.amtzhmt.launcher.util.utils.toolview.ImageViewToolBean;
 import com.amtzhmt.launcher.util.utils.toolview.VideoViewToolBean;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static com.amtzhmt.launcher.util.utils.CheckNet.getMacDefault;
 
@@ -34,20 +25,22 @@ import static com.amtzhmt.launcher.util.utils.CheckNet.getMacDefault;
  *  邮箱 784787081@qq.com
  */
 
-public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresenter> implements HomeContract.View, View.OnClickListener,View.OnFocusChangeListener {
-
+public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresenter> implements HomeContract.View, View.OnClickListener,View.OnFocusChangeListener ,DialogCallback{
     int PLAYSTATUS = Constant.UNINIT;
     RotationAnimation rotationAnimation =  new RotationAnimation();
+    String result;
+    RelativeLayout  parentlayout;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        RelativeLayout  parentlayout  =  (RelativeLayout)findViewById(R.id.root);
+        parentlayout  =  (RelativeLayout)findViewById(R.id.root);
         Intent intent =getIntent();
         //getXxxExtra方法获取Intent传递过来的数据
         String data=intent.getStringExtra("data");
-        String result = data;
+        result = data;
         mPresenter.initData(result,this,this,parentlayout);
+        mPresenter.startClien(this); //开启心跳 连接
     }
 
     @Override
@@ -59,35 +52,21 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
     @Override
     public void initFail() {
     LogUtils.toast(this,"布局失败...:"+getMacDefault(this));
-
-        AlertDialog.Builder builder  = new AlertDialog.Builder(this);
-        builder.setTitle("提示" ) ;
-        builder.setMessage("获取页面数据失败:"+getMacDefault(this) ) ;
-        builder.setPositiveButton("确认" ,  null );
-        builder.show();
-
-        LogUtils.showsystemDialog("系统弹窗",this,new Handler());
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-				System.out.println("chenzhu--->Service  onStart will in  applocation");
-                Intent actIntent = new Intent(getApplicationContext(), clientService.class);
-                actIntent.setAction("android.intent.action.MAIN");
-                actIntent.addCategory("android.intent.category.LAUNCHER");
-                actIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startService(actIntent);
-            }
-        },1* 1000);
-
+    LogUtils.showDialog(this,"布局失败,点击重试",this);
+    startActivity(new Intent(this,ChannelplayActivity.class));
+    LogUtils.i("build.prop info :"+android.os.Build.VERSION.RELEASE+LogUtils. getSystemProperty("build.prop")+"\n"+
+        //VERSION.RELEASE 固件版本
+        ", VERSION.RELEASE: " + android.os.Build.VERSION.RELEASE+"\n"+
+        ", VERSION.CODENAME: " + android.os.Build.VERSION.CODENAME+"\n"+
+         //VERSION.INCREMENTAL 基带版本
+        ", VERSION.INCREMENTAL: " + android.os.Build.VERSION.INCREMENTAL+"\n"
+        )   ;
     }
-
-
 
     @Override
     protected void onResume() {
         super.onResume();
         if (PLAYSTATUS!=Constant.UNINIT){
-            LogUtils.toast(this,"Onresum");
             mPresenter.start();
         }
 
@@ -112,7 +91,6 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
 //        ArrayList<String> arrayList = new ArrayList<>();
 //        arrayList.add("00119389676");
 //        arrayList.add("00624970452");
-//
 //        new CustomerInfoDB(this). DeletData(arrayList);
     }
     @Override
@@ -120,19 +98,20 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
 
     }
 
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            new UpdateManager(HomeActivity.this,1).showDialog("http://192.168.2.40:9000/new.apk","apk升级 \n 2.修复若干bug ");
             return true;
-        }else if(keyCode==17) {
-            finish();
-//            Intent intent = new Intent();
-//            intent.setClass(HomeActivity.this, com.amtzhmt.launcher.main.MainActivity.class);
-//            startActivity(intent);
-//            finish();
+        }else if(keyCode ==KeyEvent.KEYCODE_DPAD_LEFT){
+            new UpdateManager(HomeActivity.this,2).showDialog("http://192.168.2.40:9000/systemimg.zip","系统升级 \n 2.修复若干bug ");
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void clickSure() {
+        mPresenter.initData(result,this,this,parentlayout);
     }
 }

@@ -50,7 +50,6 @@
                 android:layout_marginRight="0.25dp"
                 android:layout_marginLeft="0.25dp"
                 android:layout_centerHorizontal="true"
-                android:background="@color/xupdate_default_theme_color"
                 android:layout_width="3dp"
                 android:layout_height="1dp"></RelativeLayout>
         </RelativeLayout>

@@ -56,6 +56,7 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
                                 mView.getdatasuccess(result);
                             } catch ( Exception e) {
                                 e.printStackTrace();
+                                mView.getdatafail();
                             }
                         }
 
@@ -67,6 +68,7 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
 
                 } catch ( Exception e) {
                     e.printStackTrace();
+                    mView.loginfail();
                 }
             }
 
@@ -74,9 +76,7 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 mView.loginfail();
             }
-
         });
-
     }
 
     @Override

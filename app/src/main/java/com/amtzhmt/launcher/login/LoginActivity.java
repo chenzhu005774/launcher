@@ -13,6 +13,7 @@ import android.widget.EditText;
 import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.home.HomeActivity;
 import com.amtzhmt.launcher.mvp.MVPBaseActivity;
+import com.amtzhmt.launcher.util.utils.DialogCallback;
 import com.amtzhmt.launcher.util.utils.LogUtils;
 
 import static com.amtzhmt.launcher.util.utils.CheckNet.getMacDefault;
@@ -24,7 +25,7 @@ import static com.amtzhmt.launcher.util.utils.CheckNet.getMacDefault;
  *  进入这个界面自动登录
  */
 
-public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPresenter> implements LoginContract.View , View.OnClickListener{
+public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPresenter> implements LoginContract.View , View.OnClickListener,DialogCallback{
     EditText nameed, pwded;
     Button loginbt;
     @Override
@@ -54,7 +55,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
     @Override
     public void loginfail() {
         LogUtils.toast(this,"登录失败了...");
-
+        LogUtils.showDialog(this,"登录失败了,点击重试",this);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
 
     @Override
     public void binMacfail() {
-        LogUtils.showDialog(this,"初始化通过MAC获取密码失败");
+        LogUtils.showDialog(this,"初始化通过MAC获取密码失败",this);
     }
 
     @Override
@@ -78,7 +79,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
 
     @Override
     public void getdatafail() {
-        LogUtils.showDialog(this,"获取数据失败了");
+        LogUtils.showDialog(this,"获取数据失败了",this);
     }
 
     @Override
@@ -96,5 +97,10 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void clickSure() {
+        mPresenter.bindMac();
     }
 }

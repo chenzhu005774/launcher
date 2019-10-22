@@ -7,13 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.util.Log;
-import android.view.WindowManager;
-
+import com.amtzhmt.launcher.util.utils.LogUtils;
 
 /**
  * Created by Administrator on 2018/1/12.
@@ -31,22 +27,22 @@ public class clientService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        System.out.println("chenzhu--->Service onDestroy");
+        LogUtils.i("chenzhu--->Service onDestroy");
     }
 
     private final static int SERVICE_ID=-5121;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        System.out.println("chenzhu--->Service  onStartCommand");
+        LogUtils.i("chenzhu--->Service  onStartCommand");
         startForeground(SERVICE_ID,new Notification());
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
                     String username = "12345567890";
-                    Log.d("pushclient","username = "+username);
-                    MyUdpClient myUdpClient = new MyUdpClient(OriginalUtil.MD5(username),1,"192.168.2.83",8092,context);
+                    LogUtils.i("username = "+username);
+                    MyUdpClient myUdpClient = new MyUdpClient(OriginalUtil.MD5(username),1,"192.168.2.40",8092,context);
                     myUdpClient.setHeartbeatInterval(30);
                     myUdpClient.start();
                     synchronized(myUdpClient){
@@ -60,10 +56,6 @@ public class clientService extends Service {
         return START_STICKY;
 
     }
-
-
-
-
 
     public class MyBinder extends Binder {
 

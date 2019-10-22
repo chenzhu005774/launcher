@@ -11,8 +11,7 @@ import android.provider.Settings;
 import android.widget.TextView;
 
 public class IsInternet {
-  
-    /** 
+    /**
      * 判断网络情况 
      * @param context 上下文 
      * @return false 表示没有网络 true 表示有网络 
@@ -46,7 +45,7 @@ public class IsInternet {
             TextView msg = new TextView(activity);
             msg.setText("当前没有可以使用的网络，请设置网络！");  
             new AlertDialog.Builder(activity)
-//                    .setIcon(R.drawab)
+//                   .setIcon(R.drawab)
                     .setTitle("网络状态提示")  
                     .setView(msg)  
                     .setPositiveButton("确定",  

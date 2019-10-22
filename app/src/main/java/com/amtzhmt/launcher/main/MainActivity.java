@@ -1,9 +1,12 @@
 package com.amtzhmt.launcher.main;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.widget.ImageView;
@@ -11,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.mvp.MVPBaseActivity;
+import com.amtzhmt.launcher.util.utils.DialogCallback;
 import com.amtzhmt.launcher.util.utils.LogUtils;
 
 /**
@@ -18,12 +22,11 @@ import com.amtzhmt.launcher.util.utils.LogUtils;
  *  邮箱 784787081@qq.com
  */
 
-public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View {
+public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View,DialogCallback {
 
     ImageView icon;
     SeekBar seek;
     RelativeLayout iconview;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,8 +46,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
 
 
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -59,12 +60,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public void loginFail(String result) {
         LogUtils.toast(this,result);
-        AlertDialog.Builder builder  = new AlertDialog.Builder(this);
-        builder.setTitle("提示" ) ;
-        builder.setMessage("登录失败" ) ;
-        builder.setPositiveButton("确认" ,  null );
-        builder.show();
-
+        LogUtils.showDialog(this,"登录失败,点击重试",this);
 
     }
 
@@ -76,7 +72,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public void getTokenFail(String result) {
         LogUtils.toast(this,result);
-        LogUtils.showDialog(this,"获取token失败");
+        LogUtils.showDialog(this,"获取token失败,点击重试",this);
 
     }
 
@@ -88,7 +84,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public void getpageFail(String result) {
         LogUtils.toast(this,result);
-        LogUtils.showDialog(this,"获取页面数据失败");
+        LogUtils.showDialog(this,"获取页面数据失败,点击重试",this);
 
     }
 
@@ -100,5 +96,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
         intent.setClass(this,cls);
         startActivity(intent);
+    }
+
+    @Override
+    public void clickSure() {
+        mPresenter.gotoNext();
     }
 }

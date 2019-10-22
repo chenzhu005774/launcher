@@ -3,6 +3,8 @@ package com.amtzhmt.launcher.push;
 
 import com.amtzhmt.launcher.util.utils.LogUtils;
 
+import org.json.JSONObject;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
@@ -11,10 +13,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicLong;
 
 import de.javawi.jstun.attribute.MessageAttribute;
-import de.javawi.jstun.attribute.MessageAttributeInterface;
 import de.javawi.jstun.attribute.Username;
 import de.javawi.jstun.header.MessageHeader;
 import de.javawi.jstun.header.MessageHeaderInterface;
+import de.javawi.jstun.util.Utility;
 
 
 public abstract class UDPClientBase implements Runnable {
@@ -52,9 +54,7 @@ public abstract class UDPClientBase implements Runnable {
 
 	
 	public UDPClientBase(String uuid, int appid, String serverAddr, int serverPort) throws Exception{
-//		if(uuid == null || uuid.length != 16){
-//			throw new IllegalArgumentException("uuid byte array must be not null and length of 16 bytes");
-//		}
+
 		if(appid < 1 || appid > 255){
 			throw new IllegalArgumentException("appid must be from 1 to 255");
 		}
@@ -146,7 +146,8 @@ public abstract class UDPClientBase implements Runnable {
 			try{workerT.interrupt();}catch(Exception e){}
 		}
 	}
-	
+
+	@Override
 	public void run(){
 		
 		synchronized(receiverT){
@@ -212,24 +213,16 @@ public abstract class UDPClientBase implements Runnable {
 		if(dp.getLength() <= 0 || dp.getData() == null || dp.getData().length == 0){
 			return;
 		}
-
         byte[] data = dp.getData();
-        MessageHeader inHeader = MessageHeader.parseHeader(data);
-        inHeader.parseAttributes(data);
 
-        Username use = (Username)inHeader.getMessageAttribute(MessageAttributeInterface.MessageAttributeType.Username);
-
-        int lastOf = use.getUsername().lastIndexOf("}");
-
-        String username = (use.getUsername().substring(0,lastOf+1));
-
-        Message msg = new Message(dp.getSocketAddress(),username);
-		LogUtils.i("user--->"+username);
-
+		byte[] typeArray = new byte[2];
+		System.arraycopy(data, 0, typeArray, 0, 2);
+		int type = Utility.twoBytesToInteger(typeArray);
+		JSONObject jSONObject = new JSONObject(new String(data,"UTF-8"));
+		LogUtils.i("get message"+type+"  typeArray:"+typeArray+" data:"+jSONObject.toString());
+        Message msg = new Message(dp.getSocketAddress(),jSONObject.toString());
         this.enqueue(msg);
 		worker.wakeup();
-
-
 	}
 	
 	private void ackServer(Message m) throws Exception{
@@ -246,22 +239,14 @@ public abstract class UDPClientBase implements Runnable {
 		}
 
         MessageHeader messageHeader = new MessageHeader(MessageHeaderInterface.MessageHeaderType.BindingRequest);
-//        String transactionID = data;
         messageHeader.setTransactionID(uuid.getBytes());
-		LogUtils.i("length--->"+new String(data));
-
-
+		LogUtils.i("length--->"+new String(data).trim());
         MessageAttribute info =new Username(data);
         messageHeader.addMessageAttribute(info);
-
-//        MessageAttribute user =  messageHeader.getMessageAttribute(MessageAttributeInterface.MessageAttributeType.Username);
-//        System.out.println("user--->"+new String(user.getBytes(),"UTF-8"));
         byte[] sendData = messageHeader.getBytes();
 
 		DatagramPacket dp = new DatagramPacket(sendData,sendData.length);
 		dp.setSocketAddress(ds.getRemoteSocketAddress());
-//		dp.setPort(12580);
-
 		ds.send(dp);
 		lastSent = System.currentTimeMillis();
 		this.sentPackets++;
@@ -367,11 +352,6 @@ public abstract class UDPClientBase implements Runnable {
 				if(m == null){
 					return;
 				}
-//				if(m.checkFormat() == false){
-//					continue;
-//				}
-
-				//real work here
 				onPushMessage(m);
 			}
 			//finish work here, such as release wake lock

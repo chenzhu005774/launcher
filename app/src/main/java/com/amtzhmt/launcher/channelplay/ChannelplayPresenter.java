@@ -36,7 +36,7 @@ public class ChannelplayPresenter extends BasePresenterImpl<ChannelplayContract.
     @Override
     public void getChannelNumber() {
         final CustomerInfoDB customerInfoDB = new CustomerInfoDB(mView.getContext());
-         CustomerEntity customerEntity = customerInfoDB.getAllObject().get(0);
+        CustomerEntity customerEntity = customerInfoDB.getAllObject().get(0);
         Api.getDefault().getChannel(customerEntity.getCode(),1,100).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

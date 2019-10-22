@@ -1,9 +1,12 @@
 package com.amtzhmt.launcher.home;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.amtzhmt.launcher.R;
+import com.amtzhmt.launcher.push.clientService;
 import com.amtzhmt.launcher.util.utils.bean.ListItemBean;
 import com.amtzhmt.launcher.util.utils.commonbean.CommonBean;
 import com.amtzhmt.launcher.util.utils.image.ViewbgLoader;
@@ -30,6 +33,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * MVPPlugin
@@ -267,6 +272,22 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
     @Override
     public void start() {
         videoViewTool.start();
+    }
+
+    @Override
+    public void startClien(final Context context) {
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                LogUtils.i("chenzhu--->Service  onStart will in  applocation");
+                Intent actIntent = new Intent(context.getApplicationContext(), clientService.class);
+                actIntent.setAction("android.intent.action.MAIN");
+                actIntent.addCategory("android.intent.category.LAUNCHER");
+                actIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startService(actIntent);
+            }
+        },1* 1000);
+
     }
 
 

@@ -1,45 +1,48 @@
 package com.amtzhmt.launcher.push;
 
+import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import com.amtzhmt.launcher.App;
 import com.amtzhmt.launcher.util.utils.LogUtils;
 import com.google.gson.Gson;
 
 
 
 public class MyUdpClient extends UDPClientBase {
- Context context ;
- final Handler handler = new Handler();
-	public MyUdpClient(String uuid, int appid, String serverAddr, int serverPort,Context context)
-			throws Exception {
+    Context context ;
+	public MyUdpClient(String uuid, int appid, String serverAddr, int serverPort,Context context)throws Exception {
 		super(uuid, appid, serverAddr, serverPort);
-	// TODO Auto-generated constructor stub
-	this.context = context;
+    	this.context = context;
 }
 
 	@Override
 	public boolean hasNetworkConnection() {
-		// TODO Auto-generated method stub
 		return true;
 	}
+
 
 	@Override
 	public void onPushMessage(Message message) {
 		if(message == null){
-			LogUtils.i( " AMTPush自定义推送信息 msg is null");
+			LogUtils.i("msg is null");
 		}
-
 		if(true) {
 			String str = null;
 			str = message.getData();
-			LogUtils.i( "AMTPush自定义推送信息:" + str);
-			LogUtils.showsystemDialog(str,context,handler);
+			LogUtils.i("AMTPush自定义推送信息:" + str+" bbbbbbbbbbbb "+App.context);
+			LogUtils.showWindowManagerDialog(App.context);
 		}
 	}
+
+
+
 
 	@Override
 	public void trySystemSleep() {
@@ -48,8 +51,11 @@ public class MyUdpClient extends UDPClientBase {
 	}
 
 
+
+
 	/**
 	 * 发送模拟按键的keyCode，服务端进行响应
+	 *
 	 * @param keyCode
 	 *            按键码
 	 */
@@ -93,6 +99,7 @@ public class MyUdpClient extends UDPClientBase {
 		}.start();
 	}
 	public JsonIMMessage getObject(String message) {
+
 		message = OriginalUtil.TripleDES.decrypt(message);
 		Gson gson = new Gson();
 		JsonIMMessage json = null;
