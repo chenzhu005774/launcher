@@ -75,7 +75,6 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
         commonBean.setOnClickListener(onClickListener);
         commonBean.setLayout(parentlayout);
 
-
 //        BannerViewToolBean bannerViewToolBean = new BannerViewToolBean();
 //        bannerViewToolBean.setHeight(200);
 //        bannerViewToolBean.setHeight(400);

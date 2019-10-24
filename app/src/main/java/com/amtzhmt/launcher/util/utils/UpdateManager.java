@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RecoverySystem;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -62,7 +63,7 @@ public class UpdateManager {
    private String loadApkUrl;
    private int progress;
    private static final int DOWN_UPDATE = 1;
-   private static final int DOWN_OVER = 2;
+   private static final int APK_DOWN_OVER = 2;
    private static final int SYS_DOWN_OVER = 3;
    private  Context mContext;
    private Dialog downloadDialog;
@@ -84,7 +85,7 @@ public class UpdateManager {
                mProgress.setProgress(progress);
                tvProgress.setText(progress+"%");
                break;
-            case DOWN_OVER:
+            case APK_DOWN_OVER:
                installApk();
                break;
             case SYS_DOWN_OVER:
@@ -100,21 +101,18 @@ public class UpdateManager {
     */
    private void verifyPackageRom() {
     File  packfile = new File(syssavePath, syssaveFileName);
-
       try {
          RecoverySystem.verifyPackage(packfile, new RecoverySystem.ProgressListener() {
             //该listener只接受一个抽象方法，参数为验证进度
             @Override
             public void onProgress(int progressnum) {
-               // TODOAuto-generated method stub
-              LogUtils.i("progress = " + progressnum);
+              LogUtils.i("verifyPackageRom progress = " + progressnum);
               progress= progressnum;
-                //实时的将验证进度显示到进度条上
+               //TODO 实时的将验证进度显示到进度条上。这里的dialog已经消失了。在这里应该重新建一个dialog
                mHandler.sendEmptyMessage(DOWN_UPDATE);
             }
          } , null);
          LogUtils.i("verifyPackage is completed and it ok");
-
          try {
             LogUtils.i("will install");
             RecoverySystem.installPackage(mContext, packfile);
@@ -123,18 +121,15 @@ public class UpdateManager {
             e.printStackTrace();
             builder.setMessage("系统验证安装失败");
          }
-
       } catch (Exception e) {
          LogUtils.i("verifyPackage　or install Exception:"+e);
          e.printStackTrace();
          builder.setMessage("系统验证不通过");
       }
-
-
    }
 
    /**
-    * 安装apk
+    *覆盖安装apk
     */
    private void installApk() {
       File apkfile = new File(saveFileName);
@@ -149,15 +144,16 @@ public class UpdateManager {
       intent.setDataAndType(Uri.fromFile(apkfile), "application/vnd.android.package-archive");
       mContext.startActivity(intent);
       downloadDialog.dismiss();
-//      android.os.Process.killProcess(android.os.Process.myPid());
- 
+
    }
-   //升级对话框
+   /**
+    *升级对话框
+    **/
    public  void showDialog(final String downApkUrl,String message) {
       AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
       builder.setTitle("版本升级").
             setIcon(R.mipmap.update). // 设置提示框的图标
-            setMessage("新版本主要包含以下更新+\n"+"1."+message).// 设置要显示的信息
+            setMessage("新版本主要包含以下更新:\n"+message).// 设置要显示的信息
             setPositiveButton("确定", new DialogInterface.OnClickListener() {// 设置确定按钮
          @Override
          public void onClick(DialogInterface dialog, int which) {
@@ -183,18 +179,27 @@ public class UpdateManager {
       tvProgress = (TextView) v.findViewById(R.id.tv_progress);
       builder.setView(v);
       downloadDialog = builder.create();
+      downloadDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+         @Override
+         public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+            return true;
+         }
+      });
       downloadDialog.show();
       loadApkUrl = downApkUrl;
       DownApkorSysrom();
    }
-   //这里我是用的子线程，这里大家根据自己需要
+   /**
+    *下载文件
+    *这里我是用的子线程
+    **/
    public  void DownApkorSysrom(){
       Thread thread=new Thread(new Runnable() {
          @Override
          public void run() {
             try {
                URL url = new URL(loadApkUrl);
-               LogUtils.i("down load DownApkorSysrom url:"+loadApkUrl);
+               LogUtils.i("updateManager download file url:"+loadApkUrl);
                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                conn.connect();
                int length = conn.getContentLength();
@@ -227,13 +232,12 @@ public class UpdateManager {
                   progress = (int) (((float) count / length) * 100);
                   // 更新进度
                   mHandler.sendEmptyMessage(DOWN_UPDATE);
-                  LogUtils.i("down numread:"+numread+"count:"+numread+" progress:"+progress+"updatetype:"+updatetype);
                   if (numread <= 0) {
                      // 下载完成通知安装
                      if (updatetype==2) {
                         mHandler.sendEmptyMessage(SYS_DOWN_OVER);
                      }else {
-                        mHandler.sendEmptyMessage(DOWN_OVER);
+                        mHandler.sendEmptyMessage(APK_DOWN_OVER);
                      }
                      break;
                   }
@@ -252,7 +256,5 @@ public class UpdateManager {
       });
       thread.start();
    }
-
-
 
 }

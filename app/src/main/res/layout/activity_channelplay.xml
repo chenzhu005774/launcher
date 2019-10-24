@@ -27,42 +27,6 @@
             android:layout_alignParentRight="true" />
 
 
-        <ImageView
-            android:focusableInTouchMode="true"
-            android:focusable="true"
-            android:id="@+id/playpause"
-            android:layout_margin="20dp"
-            android:layout_alignParentBottom="true"
-            android:src="@mipmap/pause"
-            android:layout_width="40px"
-            android:layout_height="40px" />
-
-
-        <TextView
-            android:textColor="@color/whithe"
-            android:textSize="20sp"
-            android:text="19:30/12:12"
-            android:id="@+id/time"
-            android:gravity="center"
-            android:layout_margin="20dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_width="150px"
-            android:layout_height="50px" />
-
-
-        <ProgressBar
-            android:id="@+id/progressbar"
-            android:layout_toRightOf="@id/playpause"
-            android:layout_toLeftOf="@id/time"
-            android:layout_margin="20dp"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-            android:max="200"
-            android:progress="100"
-            android:secondaryProgress="150" />
 
     </RelativeLayout>
 

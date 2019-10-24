@@ -76,7 +76,4 @@ public class ChannelplayPresenter extends BasePresenterImpl<ChannelplayContract.
         handler.postDelayed(runnable,3000);
     }
 
-
-
-
 }

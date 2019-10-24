@@ -53,7 +53,13 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             try {
                                 String result  = response.body().string();
-                                mView.getdatasuccess(result);
+                                JSONObject jSONObject = new JSONObject(result);
+                                String data = jSONObject.getString("data");
+                                if (data==null||data.equals("")||data.equals("null")){
+                                    mView.getdatafail();
+                                }else {
+                                    mView.getdatasuccess(result);
+                                }
                             } catch ( Exception e) {
                                 e.printStackTrace();
                                 mView.getdatafail();

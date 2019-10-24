@@ -16,6 +16,7 @@ import com.amtzhmt.launcher.mvp.MVPBaseActivity;
 import com.amtzhmt.launcher.util.utils.LogUtils;
 import com.amtzhmt.launcher.util.utils.toolview.ImageViewToolBean;
 import com.amtzhmt.launcher.util.utils.toolview.VideoViewToolBean;
+import com.amtzhmt.launcher.vodplay.VodplayActivity;
 
 import static com.amtzhmt.launcher.util.utils.CheckNet.getMacDefault;
 
@@ -53,7 +54,7 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
     public void initFail() {
     LogUtils.toast(this,"布局失败...:"+getMacDefault(this));
     LogUtils.showDialog(this,"布局失败,点击重试",this);
-    startActivity(new Intent(this,ChannelplayActivity.class));
+//    startActivity(new Intent(this,ChannelplayActivity.class));
     LogUtils.i("build.prop info :"+android.os.Build.VERSION.RELEASE+LogUtils. getSystemProperty("build.prop")+"\n"+
         //VERSION.RELEASE 固件版本
         ", VERSION.RELEASE: " + android.os.Build.VERSION.RELEASE+"\n"+
@@ -84,8 +85,14 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
             startActivity(intent);
             return;
         }else if (object instanceof ImageViewToolBean){
+//            Intent intent = new Intent();
+//            intent.setClass(this, CatalogActivity.class);
+//            startActivity(intent);
+
+            mPresenter.pause();
+            PLAYSTATUS = Constant.PAUSE;
             Intent intent = new Intent();
-            intent.setClass(this, CatalogActivity.class);
+            intent.setClass(this, VodplayActivity.class);
             startActivity(intent);
         }
 //        ArrayList<String> arrayList = new ArrayList<>();
@@ -101,10 +108,11 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
-            new UpdateManager(HomeActivity.this,1).showDialog("http://192.168.2.40:9000/new.apk","apk升级 \n 2.修复若干bug ");
+            new UpdateManager(HomeActivity.this,1).showDialog("http://192.168.2.40:9000/new.apk","1.本次apk升级 \n 2.修复若干bug ");
             return true;
-        }else if(keyCode ==KeyEvent.KEYCODE_DPAD_LEFT){
-            new UpdateManager(HomeActivity.this,2).showDialog("http://192.168.2.40:9000/systemimg.zip","系统升级 \n 2.修复若干bug ");
+        }else if(keyCode ==82){
+            //首页按键 开始系统升级
+            new UpdateManager(HomeActivity.this,2).showDialog("http://192.168.2.40:9000/systemimg.zip","1.本次系统升级 \n 2.修复若干bug ");
         }
 
         return super.onKeyDown(keyCode, event);

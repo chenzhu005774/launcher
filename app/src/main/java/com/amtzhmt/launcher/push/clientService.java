@@ -1,10 +1,8 @@
 package com.amtzhmt.launcher.push;
 
-import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;

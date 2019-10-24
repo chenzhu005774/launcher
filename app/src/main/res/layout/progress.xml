@@ -8,15 +8,17 @@
     <ProgressBar
         android:layout_marginRight="20px"
         android:layout_marginLeft="20px"
-        android:layout_marginTop="100px"
+        android:layout_marginTop="20px"
         android:id="@+id/progress"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         style="?android:attr/progressBarStyleHorizontal"
         />
     <TextView
+        android:layout_gravity="center_horizontal"
+        android:textSize="35sp"
         android:id="@+id/tv_progress"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:gravity="right"
         android:text="0%"
         android:layout_height="wrap_content" />

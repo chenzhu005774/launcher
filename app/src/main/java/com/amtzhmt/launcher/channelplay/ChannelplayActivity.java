@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,8 +26,8 @@ import java.util.List;
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
- *  implements
+ * 邮箱 784787081@qq.com
+ * implements
  */
 
 public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.View, ChannelplayPresenter> implements ChannelplayContract.View,
@@ -35,8 +36,7 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
   boolean isinitSuccess =false;
   int channelIndex =0;
   int totalNum =0;
-   TextView channelNumtxt;
-   RelativeLayout playcontrollView;
+  TextView channelNumtxt;
   List<ChannelEntity> channelEntities = new ArrayList<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,7 +44,6 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
         setContentView(R.layout.activity_channelplay);
         channelplay = (MyVideoView)findViewById(R.id.channelplay);
         channelNumtxt= (TextView)findViewById(R.id.channelnumber);
-        playcontrollView =(RelativeLayout)findViewById(R.id.playcontrollView);
         channelplay.setOnErrorListener(this);
         channelplay.setOnPreparedListener(this);
         mPresenter.getChannelNumber();
@@ -73,7 +72,8 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
 
     @Override
     public void controllerView() {
-        playcontrollView.setVisibility(View.GONE);
+      //        控制播放的视图
+        channelNumtxt.setVisibility(View.GONE);
     }
 
     @Override
@@ -102,26 +102,26 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (isinitSuccess){
-        //如果准备完毕那么上下键就是切台
+            LogUtils.i("onkey:"+keyCode);
+          //如果准备完毕那么上下键就是切台
             if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER||keyCode == KeyEvent.KEYCODE_ENTER) {
                 return true;
-            }else  if ( keyCode == KeyEvent.KEYCODE_DPAD_UP){
+            }else  if ( keyCode == KeyEvent.KEYCODE_DPAD_UP||keyCode==166){
                 channelIndex+=1;
                 if (channelIndex>totalNum-1){
                     channelIndex=0;
                 }
                 channelplay.setVideoURI(Uri.parse(channelEntities.get(channelIndex).getUrl()));
-                playcontrollView.setVisibility(View.VISIBLE);
                 channelNumtxt.setText(channelIndex+1+"");
                 mPresenter.timeSend();
                 return true;
-            }else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN){
+            }else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN||keyCode==167){
                 channelIndex-=1;
                 if (channelIndex<0){
                     channelIndex=totalNum-1;
                 }
                 channelplay.setVideoURI(Uri.parse(channelEntities.get(channelIndex).getUrl()));
-                playcontrollView.setVisibility(View.VISIBLE);
+//                channelplay.setVideoURI(Uri.parse("http://192.168.2.40:9000/mov_bbb.mp4"));
                 channelNumtxt.setText(channelIndex+1+"");
                 LogUtils.i("isnull--?"+channelNumtxt);
                 mPresenter.timeSend();
@@ -138,4 +138,6 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
 }

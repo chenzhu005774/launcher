@@ -79,7 +79,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
 
     @Override
     public void getdatafail() {
-        LogUtils.showDialog(this,"获取数据失败了",this);
+        LogUtils.showDialog(this,"获取首页数据失败了,点击重新获取",this);
     }
 
     @Override

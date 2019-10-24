@@ -19,7 +19,7 @@ import com.amtzhmt.launcher.util.utils.LogUtils;
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
+ * 邮箱 784787081@qq.com
  */
 
 public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View,DialogCallback {

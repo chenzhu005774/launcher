@@ -37,6 +37,7 @@
         <activity android:name=".channelplay.ChannelplayActivity" />
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".catalog.CatalogActivity" />
+        <activity android:name=".vodplay.VodplayActivity" />
         <service android:name="com.amtzhmt.launcher.push.clientService"/>
     </application>
 

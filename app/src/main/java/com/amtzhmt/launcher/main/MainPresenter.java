@@ -90,8 +90,14 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                 try {
                                                     String result = response.body().string();
-                                                    mView.getpageSuccess("get page success");
-                                                    mView.gotoNextActivity(result,HomeActivity.class);
+                                                    JSONObject jSONObject = new JSONObject(result);
+                                                    String data = jSONObject.getString("data");
+                                                    if (data==null||data.equals("")||data.equals("null")){
+                                                        mView.getpageFail("get page  fail");
+                                                    }else {
+                                                        mView.getpageSuccess("get page success");
+                                                        mView.gotoNextActivity(result,HomeActivity.class);
+                                                    }
                                                     return;
                                                 } catch (Exception e) {
                                                     mView.getpageFail("get page  fail");
