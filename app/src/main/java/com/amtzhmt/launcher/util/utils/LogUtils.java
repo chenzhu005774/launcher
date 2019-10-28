@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -27,7 +29,7 @@ import java.io.InputStreamReader;
 
 /**
  * 打印log信息类
- * @author zxy
+ * @author
  */
 public class LogUtils {
     /**
@@ -187,41 +189,18 @@ public class LogUtils {
             Log.d("[" + TAG_APP + "]", paramString);
         }
     }
-    /**
-     * 显示系统级别弹窗
-     * @param msg
-     */
-    public static void  showsystemDialog(final  String  msg, Context context , final Handler handler){
-        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-        builder.setMessage(msg);
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        final android.app.AlertDialog dialog = builder.create();
-        //在dialog show前添加此代码，表示该dialog属于系统dialog。
-        dialog.getWindow().setType((WindowManager.LayoutParams.TYPE_SYSTEM_ALERT));
-        final   View view = View.inflate(context, R.layout.system_dialog_view, null);
-        dialog.setView(view,0,0,0,0);
-        new Thread() {
-            public void run() {
-                SystemClock.sleep(2000);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialog.show();
-                        TextView tvMsg = (TextView) dialog.findViewById( R.id.dialog_text);
-                         tvMsg.setText(msg);
-                    }
-                });
-            };
-        }.start();
+    public static void showDialog(Context context,String paramString  ) {
+        if (isLogEnabled) {
+            AlertDialog.Builder builder  = new AlertDialog.Builder(context);
+            builder.setTitle("提示" ) ;
+            builder.setMessage(paramString ) ;
+            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+            builder.show();
+        }
     }
 
     public static void showWindowManagerDialog(Context context){
@@ -329,5 +308,24 @@ public class LogUtils {
             }
         }
         return line;
+    }
+
+    /**
+     * 获取当前本地apk的版本
+     *
+     * @param mContext
+     * @return
+     */
+    public static int getVersionCode(Context mContext) {
+        int versionCode = 0;
+        try {
+            //获取软件版本号，对应AndroidManifest.xml下android:versionCode
+            versionCode = mContext.getPackageManager().
+                    getPackageInfo(mContext.getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionCode;
+
     }
 }

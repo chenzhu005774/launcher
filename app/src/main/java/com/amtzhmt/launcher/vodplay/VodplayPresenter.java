@@ -25,13 +25,13 @@ public class VodplayPresenter extends BasePresenterImpl<VodplayContract.View> im
         }
     };
 
-    Handler viewhandler = new Handler();
-    Runnable viewrunnable = new Runnable() {
+    Handler playtimehandler = new Handler();
+    Runnable playtimerunnable = new Runnable() {
         @Override
         public void run() {
             if (mView!=null) {
                 mView.updateView();
-                viewhandler.postDelayed(this, 1000);
+                playtimehandler.postDelayed(this, 1000);
             }
         }
     };
@@ -49,19 +49,19 @@ public class VodplayPresenter extends BasePresenterImpl<VodplayContract.View> im
     }
 
     @Override
-    public void timeUpdateview() {
-        viewhandler.postDelayed(viewrunnable,1);
+    public void playtimeUpdateview() {
+        playtimehandler.postDelayed(playtimerunnable,1);
     }
 
     @Override
-    public void timeremove() {
+    public void playtimeremove() {
         handler.removeCallbacks(runnable);
     }
 
     @Override
     public void timeremoveall() {
         handler.removeCallbacks(runnable);
-        viewhandler.removeCallbacks(viewrunnable);
+        playtimehandler.removeCallbacks(playtimerunnable);
     }
 
 
@@ -79,5 +79,17 @@ public class VodplayPresenter extends BasePresenterImpl<VodplayContract.View> im
         } else {
             return mFormatter.format("%02d:%02d", minutes, seconds).toString();
         }
+    }
+
+    @Override
+    public void playvideo() {
+        mView.playvideo();
+        playtimehandler.postDelayed(playtimerunnable,1);
+    }
+
+    @Override
+    public void pausevideo() {
+       mView.pausevideo();
+        playtimehandler.removeCallbacks(playtimerunnable);
     }
 }

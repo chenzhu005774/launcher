@@ -46,7 +46,8 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
 
     @Override
     public void inintSuccess() {
-        LogUtils.toast(this,"布局完成");
+        int versioncode =LogUtils.getVersionCode(this);
+        LogUtils.showDialog(this,"this version:"+versioncode);
         PLAYSTATUS = Constant.PLAY;
     }
 

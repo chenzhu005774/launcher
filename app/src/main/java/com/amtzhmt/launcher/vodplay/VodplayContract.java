@@ -18,15 +18,19 @@ public class VodplayContract {
         void getvoddataSuccess();
         void controllerView();
         void updateView();
+        void  playvideo();
+        void pausevideo();
     }
 
     interface  Presenter extends BasePresenter<View> {
         void  getvodData();
         //定时显示关闭的控件
         void   timeSend();
-        void  timeUpdateview();
-        void  timeremove();
+        void  playtimeUpdateview();
+        void  playtimeremove();
         void timeremoveall();
         String changeTimeFormat(int time);
+        void  playvideo();
+        void pausevideo();
     }
 }

@@ -30,7 +30,6 @@ public class MarqueeTextView extends AppCompatTextView {
     }
     /**
      * 始终获取焦点
-     *
      * 跑马灯在TextView处于焦点状态的时候才会滚动
      * @return
      */

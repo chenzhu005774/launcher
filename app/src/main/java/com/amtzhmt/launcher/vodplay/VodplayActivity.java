@@ -1,6 +1,10 @@
 package com.amtzhmt.launcher.vodplay;
 
 
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,14 +13,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.mvp.MVPBaseActivity;
 import com.amtzhmt.launcher.util.utils.Constant;
 import com.amtzhmt.launcher.util.utils.LogUtils;
+import com.amtzhmt.launcher.util.utils.customizeview.MySeekBar;
 import com.amtzhmt.launcher.util.utils.customizeview.MyVideoView;
 
 import java.text.NumberFormat;
@@ -37,17 +40,20 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
     RelativeLayout playcontrollView;
     TextView title;
     TextView time;
-    ProgressBar progressbar;
+    MySeekBar progressbar;
     int PLAYSATTUS = Constant.UNINIT;
     int cur=0;
     int total=0;
+    boolean isseekbarfocus =false;
+    Rect oldRect;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vodplay);
         channelplay = (MyVideoView)findViewById(R.id.channelplay);
         playcontrollView= (RelativeLayout) findViewById(R.id.playcontrollView);
-        progressbar = (ProgressBar)findViewById(R.id.progressbar);
+        progressbar = (MySeekBar) findViewById(R.id.progressbar);
+        progressbar.setOnFocusChangeListener(this);
         playpause =(ImageView)findViewById(R.id.playpause);
         time = (TextView)findViewById(R.id.time);
         playpause.setOnFocusChangeListener(this);
@@ -57,11 +63,16 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
         previous.setOnClickListener(this);
         next = (ImageView)findViewById(R.id.next);
         next.setOnFocusChangeListener(this);
+        next.setOnClickListener(this);
+        previous.setOnClickListener(this);
         previous.setOnClickListener(this);
         title = (TextView)findViewById(R.id.title);
         channelplay.setOnErrorListener(this);
         channelplay.setOnPreparedListener(this);
-
+        oldRect = progressbar.getThumb().getBounds();//获取原来的Bounds构建一个Rect
+        Drawable drawable = getResources().getDrawable(R.mipmap.thumbnf);//新的图片转成drawable对象
+        drawable.setBounds(oldRect);//为新的图片对象添加Bounds
+        progressbar.setThumb( drawable );
         mPresenter.getvodData();
     }
 
@@ -74,7 +85,8 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
 
     @Override
     public void getvoddataSuccess() {
-        channelplay.setVideoURI(Uri.parse("http://192.168.2.40:9000/kzm.ts"));
+//        http://v.ysbang.cn//data/video/2015/rkb/2015rkb01.mp4
+        channelplay.setVideoURI(Uri.parse("http://www.tastyfit.vip:8080/test.mp4"));
     }
 
     @Override
@@ -96,9 +108,25 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
     }
 
     @Override
+    public void playvideo() {
+        channelplay.start();
+        playpause.setImageResource(R.mipmap.pause);
+        PLAYSATTUS=Constant.PLAY;
+        mPresenter.timeSend();
+    }
+
+    @Override
+    public void pausevideo() {
+        channelplay.pause();
+        playpause.setImageResource(R.mipmap.play);
+        PLAYSATTUS=Constant.PAUSE;
+        mPresenter.playtimeremove();
+    }
+
+    @Override
     public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
         LogUtils.toast(this,"播放错误... ");
-        LogUtils.i("-------:"+i +" "+i1);
+        LogUtils.i("播放错误:"+i +" "+i1);
         channelplay.stopPlayback();
         PLAYSATTUS=Constant.UNINIT;
         return true;
@@ -112,7 +140,7 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
         isinitSuccess=true;
         PLAYSATTUS=Constant.PLAY;
         mPresenter.timeSend();
-        mPresenter.timeUpdateview();
+        mPresenter.playtimeUpdateview();
     }
     @Override
     protected void onDestroy() {
@@ -125,6 +153,7 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        LogUtils.i("---->"+keyCode);
         if (isinitSuccess){
              // 如果不是暂停状态才去设置3秒过后消失
             if (PLAYSATTUS!=Constant.PAUSE) {
@@ -135,21 +164,34 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
                 playcontrollView.setVisibility(View.VISIBLE);
                 playpause.requestFocus();
             }
-            if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER||keyCode == KeyEvent.KEYCODE_ENTER) {
-                return true;
-            }else  if ( keyCode == KeyEvent.KEYCODE_DPAD_UP){
-                return true;
-            }else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN){
-                return true;
-            }
-//            else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT){
+//            if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER||keyCode == KeyEvent.KEYCODE_ENTER) {
 //                return true;
-//            }else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
+//            }else  if ( keyCode == KeyEvent.KEYCODE_DPAD_UP){
+//                return true;
+//            }else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN){
 //                return true;
 //            }
-            else {
-                return super.onKeyDown(keyCode, event);
+
+             if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT&&isseekbarfocus){
+                 cur = total*(progressbar.getProgress()-5)/100;
+                 if (cur<=0){
+                     cur=0;
+                 }
+                 channelplay.seekTo(cur);
+                 if(PLAYSATTUS==Constant.PAUSE){
+                     mPresenter.playvideo();
+                 }
+            }else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT&&isseekbarfocus){
+                 cur = total*(progressbar.getProgress()+5)/100;
+                 if (cur>=total){
+                     cur=total;
+                 }
+                 channelplay.seekTo(cur);
+                 if(PLAYSATTUS==Constant.PAUSE){
+                     mPresenter.playvideo();
+                 }
             }
+
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -185,6 +227,18 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
                     channelplay.setBackgroundResource(0);
                 }
                 break;
+            case R.id.progressbar:
+                isseekbarfocus=b;
+                if (b){
+                    Drawable drawable = getResources().getDrawable(R.mipmap.thumbf);//新的图片转成drawable对象
+                    drawable.setBounds(oldRect);//为新的图片对象添加Bounds
+                    progressbar.setThumb( drawable );
+                }else {
+                    Drawable drawable = getResources().getDrawable(R.mipmap.thumbnf);//新的图片转成drawable对象
+                    drawable.setBounds(oldRect);//为新的图片对象添加Bounds
+                    progressbar.setThumb( drawable );
+                }
+                break;
         }
 
     }
@@ -193,22 +247,20 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
     public void onClick(View view) {
        switch (view.getId()){
            case R.id.previous:
+               channelplay.setVideoURI(Uri.parse("http://www.tastyfit.vip:8080/test1.ts"));
                break;
            case R.id.playpause:
                if (Constant.PLAY==PLAYSATTUS){
-                   channelplay.pause();
-                   playpause.setImageResource(R.mipmap.play);
-                   PLAYSATTUS=Constant.PAUSE;
-                   mPresenter.timeremove();
+                  mPresenter.pausevideo();
                }else {
-                   channelplay.start();
-                   playpause.setImageResource(R.mipmap.pause);
-                   PLAYSATTUS=Constant.PLAY;
-                   mPresenter.timeSend();
+                  mPresenter.playvideo();
                }
                break;
            case R.id.next:
+               channelplay.setVideoURI(Uri.parse("http://124.116.129.62:8091/static_resource/hyresource/0003/video/8481565679653437.ts"));
                break;
        }
     }
+
+
 }

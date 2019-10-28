@@ -57,7 +57,9 @@ public class UpdateManager {
    private static final String syssaveFileName =  "update.zip";
 
    private static final String savePath = Environment.getExternalStorageDirectory().getPath() + "/apkupdatefile/";
-   private static final String saveFileName = savePath + "launcher.apk";
+private static final String saveFileName ="launcher.apk";
+//   private static final String savePath = Environment.getRootDirectory() + "/app/";
+//   private static final String saveFileName =  "launcher.apk";
    private ProgressBar mProgress;
    private boolean interceptFlag = false;
    private String loadApkUrl;
@@ -132,7 +134,7 @@ public class UpdateManager {
     *覆盖安装apk
     */
    private void installApk() {
-      File apkfile = new File(saveFileName);
+      File apkfile = new File(savePath,saveFileName);
       if (!apkfile.exists()) {
          return;
       }
@@ -151,7 +153,7 @@ public class UpdateManager {
     **/
    public  void showDialog(final String downApkUrl,String message) {
       AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-      builder.setTitle("版本升级").
+      builder.setTitle("新版本升级").
             setIcon(R.mipmap.update). // 设置提示框的图标
             setMessage("新版本主要包含以下更新:\n"+message).// 设置要显示的信息
             setPositiveButton("确定", new DialogInterface.OnClickListener() {// 设置确定按钮
@@ -213,7 +215,7 @@ public class UpdateManager {
                      file.mkdir();
                   }
                   filename = saveFileName;
-                  downFile = new File(filename);
+                  downFile = new File(file,filename);
                }else {//否则类型为2 表示系统更新
                    file = new File(syssavePath);
                   if (!file.exists()) {
@@ -248,7 +250,7 @@ public class UpdateManager {
                builder.setMessage("文件下载异常....");
                e.printStackTrace();
             } catch (IOException e) {
-               LogUtils.i("down load IOException:"+e.toString());
+               LogUtils.i("down load IOException TTTT:"+e.toString());
                builder.setMessage("文件下载异常....");
                e.printStackTrace();
             }
