@@ -44,7 +44,7 @@ public class TextClockViewTool {
 //        if(textClockViewToolBean.getFormattype()!=null&&!textClockViewToolBean.getFormattype().equals("")) {
 //            textClock.setFormat12Hour(textClockViewToolBean.getFormattype());
 //        }else {
-            textClock.setFormat12Hour("yyyy.MM.dd EE hh:mm");
+            textClock.setFormat12Hour("hh:mm \nEE yyyy.MM.dd");
 //        }
         textClock.setGravity(Gravity.CENTER);
         textClock.setTextSize(textClockViewToolBean.getTextsize());
