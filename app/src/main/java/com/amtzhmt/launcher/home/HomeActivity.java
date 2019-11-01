@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+
 import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.catalog.CatalogActivity;
 import com.amtzhmt.launcher.channelplay.ChannelplayActivity;
@@ -112,8 +114,9 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
             new UpdateManager(HomeActivity.this,1).showDialog("http://192.168.2.40:9000/new.apk","1.本次apk升级 \n 2.修复若干bug ");
             return true;
         }else if(keyCode ==82){
-            //首页按键 开始系统升级
-            new UpdateManager(HomeActivity.this,2).showDialog("http://192.168.2.40:9000/systemimg.zip","1.本次系统升级 \n 2.修复若干bug ");
+            //首页按键 开始系统升级 com.inpor.fmctv.activity.LoginActivity
+//            new UpdateManager(HomeActivity.this,2).showDialog("http://192.168.2.40:9000/systemimg.zip","1.本次系统升级 \n 2.修复若干bug ");
+            mPresenter.jumpApk("com.inpor.fmctv",this);
         }
 
         return super.onKeyDown(keyCode, event);
@@ -123,4 +126,6 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
     public void clickSure() {
         mPresenter.initData(result,this,this,parentlayout);
     }
+
+
 }

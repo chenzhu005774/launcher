@@ -20,7 +20,7 @@ public class HomeContract {
     interface  Presenter extends BasePresenter<View> {
        void initData(String data, android.view.View.OnFocusChangeListener focusChangeListener, android.view.View.OnClickListener clickListener
        , RelativeLayout parentlayout);
-
+        void  jumpApk(String packgename,Context context);
         void  pause();
         void start();
         void startClien(Context context);

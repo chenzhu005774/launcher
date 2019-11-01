@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.push.clientService;
@@ -261,6 +262,16 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
              mView.initFail();
         }
 
+    }
+
+    @Override
+    public void jumpApk(String packgename, Context context) {
+        try{
+            Intent intent = context.getPackageManager().getLaunchIntentForPackage(packgename);
+            context.startActivity(intent);
+        }catch(Exception e){
+            Toast.makeText(context, "没有安装", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
