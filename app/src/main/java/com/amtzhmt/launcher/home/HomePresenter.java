@@ -171,7 +171,6 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
                        }else {
                            imageViewToolBean_f.setUrl("");
                        }
-
 //                        imageViewToolBean_f.setUrl(null);
                         imageViewToolBean_f.setHeigh(itemcJson.getInt("height"));
                         imageViewToolBean_f.setWidth(itemcJson.getInt("width"));

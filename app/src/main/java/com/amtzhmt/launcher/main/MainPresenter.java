@@ -149,7 +149,8 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             progress += 10;
             if (progress > 90) {
                 progress = 10;
-                startAPP("com.android.smart.terminal.settings");
+//                startAPP("com.android.smart.terminal.settings");
+                startAPP("com.android.settings");
                 handler.removeCallbacks(changePross);
                 handler.removeCallbacks(runnable);
                 return;
@@ -181,6 +182,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     /**
      * @exception :启动apk
+     * com.android.smart.terminal.settings/.LaunchActivity
      * @param ：String  包名
      **/
     public void startAPP(String appPackageName){

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.amtzhmt.launcher.util.utils.LogUtils;
 import com.amtzhmt.launcher.util.utils.toolview.ImageViewToolBean;
 import com.amtzhmt.launcher.util.utils.toolview.VideoViewToolBean;
 import com.amtzhmt.launcher.vodplay.VodplayActivity;
+import com.amtzhmt.launcher.webview.WebviewActivity;
 
 import static com.amtzhmt.launcher.util.utils.CheckNet.getMacDefault;
 
@@ -95,7 +97,7 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
             mPresenter.pause();
             PLAYSTATUS = Constant.PAUSE;
             Intent intent = new Intent();
-            intent.setClass(this, VodplayActivity.class);
+            intent.setClass(this, WebviewActivity.class);
             startActivity(intent);
         }
 //        ArrayList<String> arrayList = new ArrayList<>();

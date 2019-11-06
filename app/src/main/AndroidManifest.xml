@@ -38,6 +38,7 @@
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".catalog.CatalogActivity" />
         <activity android:name=".vodplay.VodplayActivity" />
+        <activity android:name=".webview.WebviewActivity" />
         <service android:name="com.amtzhmt.launcher.push.clientService"/>
     </application>
 

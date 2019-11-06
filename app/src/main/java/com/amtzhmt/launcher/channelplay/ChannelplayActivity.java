@@ -131,6 +131,8 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
                 return true;
             }else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
                 return true;
+            }else if(keyCode==184){
+                startAPP("com.android.settings");
             }else {
                 return super.onKeyDown(keyCode, event);
             }
@@ -139,5 +141,12 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
         return super.onKeyDown(keyCode, event);
     }
 
-
+    public void startAPP(String appPackageName){
+        try{
+            Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(appPackageName);
+            getContext().startActivity(intent);
+        }catch(Exception e){
+            Toast.makeText(getContext(), "没有安装", Toast.LENGTH_LONG).show();
+        }
+    }
 }
