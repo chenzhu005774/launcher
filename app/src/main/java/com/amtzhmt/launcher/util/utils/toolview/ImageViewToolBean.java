@@ -20,6 +20,9 @@ public class ImageViewToolBean {
     int focustype = 0;
     String focuspicurl;
 
+    // 跳转url
+    String jumpurl;
+
 
     public int getWidth() {
         return width;
@@ -91,5 +94,13 @@ public class ImageViewToolBean {
 
     public void setFocuspicurl(String focuspicurl) {
         this.focuspicurl = Constant.pichttp+focuspicurl;
+    }
+
+    public String getJumpurl() {
+        return jumpurl;
+    }
+
+    public void setJumpurl(String jumpurl) {
+        this.jumpurl = jumpurl;
     }
 }

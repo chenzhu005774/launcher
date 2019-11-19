@@ -90,14 +90,12 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
             startActivity(intent);
             return;
         }else if (object instanceof ImageViewToolBean){
-//            Intent intent = new Intent();
-//            intent.setClass(this, CatalogActivity.class);
-//            startActivity(intent);
 
             mPresenter.pause();
             PLAYSTATUS = Constant.PAUSE;
-            Intent intent = new Intent();
-            intent.setClass(this, WebviewActivity.class);
+            Intent intent = new Intent(this, WebviewActivity.class);
+            intent.putExtra("jumpurl",((ImageViewToolBean) object).getJumpurl());
+            LogUtils.i("-->-->-->:"+((ImageViewToolBean) object).getJumpurl());
             startActivity(intent);
         }
 //        ArrayList<String> arrayList = new ArrayList<>();
@@ -117,8 +115,8 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
             return true;
         }else if(keyCode ==82){
             //首页按键 开始系统升级 com.inpor.fmctv.activity.LoginActivity
-//            new UpdateManager(HomeActivity.this,2).showDialog("http://192.168.2.40:9000/systemimg.zip","1.本次系统升级 \n 2.修复若干bug ");
-            mPresenter.jumpApk("com.inpor.fmctv",this);
+            new UpdateManager(HomeActivity.this,2).showDialog("http://192.168.2.40:9000/systemimg.zip","1.本次系统升级 \n 2.修复若干bug ");
+//            mPresenter.jumpApk("com.inpor.fmctv",this);
         }
 
         return super.onKeyDown(keyCode, event);

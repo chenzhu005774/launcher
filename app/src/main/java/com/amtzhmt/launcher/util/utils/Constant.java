@@ -13,4 +13,7 @@ public class Constant {
     public static int PAUSE =0;
     public static int PLAY=1;
     public static int UNINIT=-1;
+    public static String serviceIP = "192.168.2.83";
+    public static int  POTR = 8092;
+    public static String  KEY = "abcdefabcdefabcdefabcdefabcdefabcdef";
 }

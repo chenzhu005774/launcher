@@ -167,7 +167,7 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
                         ImageViewToolBean imageViewToolBean_f = new ImageViewToolBean();
                        if (!itemcJson.getJSONObject("iconPic").getJSONObject("url").isNull("diskPath")){
                            imageViewToolBean_f.setUrl(itemcJson.getJSONObject("iconPic").getJSONObject("url").getString("diskPath"));
-                           System.out.println("----------->pic"+imageViewToolBean_f.getUrl());
+                           LogUtils.i("----------->pic"+imageViewToolBean_f.getUrl());
                        }else {
                            imageViewToolBean_f.setUrl("");
                        }
@@ -181,6 +181,20 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
                             imageViewToolBean_f.setFocuspicurl(itemcJson.getJSONObject("focusPic").getJSONObject("url").getString("diskPath"));
                         }else {
                             imageViewToolBean_f.setFocuspicurl("");
+                        }
+                        if (!itemcJson.getString("resource").equals("null")&&itemcJson.getString("resource")!=null
+                            &&itemcJson.getJSONObject("resource").getJSONArray("resourceData").length()!=0) {
+                            String customercode = itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getString("customerCode");
+                            String parentcode = itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getString("code");
+                            String url = itemcJson.getJSONObject("data").getString("url");
+                            if(url.isEmpty()){
+                                imageViewToolBean_f.setJumpurl("");
+                            }else {
+                                imageViewToolBean_f.setJumpurl(url+"?cpCode="+customercode+"&parentCode="+parentcode);
+                            }
+
+                        }else {
+                            imageViewToolBean_f.setJumpurl("");
                         }
 
                         imageViewToolBean_f.setFocus(true);

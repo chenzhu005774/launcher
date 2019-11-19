@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+
+import com.amtzhmt.launcher.util.utils.Constant;
 import com.amtzhmt.launcher.util.utils.LogUtils;
 
 /**
@@ -40,7 +42,8 @@ public class clientService extends Service {
                 try{
                     String username = "12345567890";
                     LogUtils.i("username = "+username);
-                    MyUdpClient myUdpClient = new MyUdpClient(OriginalUtil.MD5(username),1,"192.168.2.40",8092,context);
+//                    MyUdpClient myUdpClient = new MyUdpClient(OriginalUtil.MD5(username),1,"192.168.2.40",8092,context);
+                    MyUdpClient myUdpClient = new MyUdpClient("12345567890"+Constant.KEY,1, Constant.serviceIP,Constant.POTR,context);
                     myUdpClient.setHeartbeatInterval(30);
                     myUdpClient.start();
                     synchronized(myUdpClient){
