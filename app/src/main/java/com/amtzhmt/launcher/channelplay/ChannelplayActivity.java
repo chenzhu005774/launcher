@@ -28,6 +28,7 @@ import java.util.List;
  * MVPPlugin
  * 邮箱 784787081@qq.com
  * implements
+ * 
  */
 
 public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.View, ChannelplayPresenter> implements ChannelplayContract.View,
