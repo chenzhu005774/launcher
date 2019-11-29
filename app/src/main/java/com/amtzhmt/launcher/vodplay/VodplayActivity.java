@@ -73,6 +73,7 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
         Drawable drawable = getResources().getDrawable(R.mipmap.thumbnf);//新的图片转成drawable对象
         drawable.setBounds(oldRect);//为新的图片对象添加Bounds
         progressbar.setThumb( drawable );
+        //        获取播放数据
         mPresenter.getvodData();
     }
 
@@ -86,7 +87,7 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
     @Override
     public void getvoddataSuccess() {
 //        http://v.ysbang.cn//data/video/2015/rkb/2015rkb01.mp4
-        channelplay.setVideoURI(Uri.parse("http://www.tastyfit.vip:8080/test.mp4"));
+        channelplay.setVideoURI(Uri.parse("http://192.168.2.40:9000/kmz.ts"));
     }
 
     @Override
