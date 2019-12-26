@@ -35,12 +35,14 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
         LogUtils.i("-->-->-->:"+intent.getStringExtra("jumpurl")+"--|||||||--"+jumpurl);
         webview = (WebView)findViewById(R.id.webview);
         mPresenter.initwebview(webview);
-
+       //添加js接口，指明供js调用的对象和名称
+        webview.addJavascriptInterface(this, "MediaPlayer");
     }
 
     @Override
     public void loadurl(WebView webview) {
 //        webview.loadUrl("http://192.168.2.4:5500/list.html?code=01564457320587756&title=%u65B0%u95FB%u52A8%u6001");
+//        webview.loadUrl("file:///android_asset/test.html");
           webview.loadUrl(jumpurl);
           LogUtils.toast(WebviewActivity.this, jumpurl);
 
@@ -62,6 +64,9 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
         LogUtils.toast(this,"form js html playvideo");
         startActivity(new Intent(this, VodplayActivity.class));
     }
-
+    @JavascriptInterface
+    public void hello(String msg) {
+          Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+      }
 
 }

@@ -27,6 +27,7 @@ public class WebviewPresenter extends BasePresenterImpl<WebviewContract.View> im
         settings.setLoadWithOverviewMode(true);//和setUseWideViewPort(true)一起解决网页自适应问题
         settings.setAppCacheEnabled(true);//是否使用缓存
         settings.setDomStorageEnabled(true);//DOM Storage
+        settings.setSupportMultipleWindows(true);
 
         webview.setBackgroundColor(0);
         webview.getSettings().setSupportMultipleWindows(true);
