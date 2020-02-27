@@ -1,6 +1,7 @@
 package com.amtzhmt.launcher.util.utils.toolview;
 
 
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -46,6 +47,10 @@ final public class TextViewTool {
         textView.setGravity(Gravity.CENTER);
         textView.setText(textViewToolBean.getText());
         textView.setTextSize(textViewToolBean.getTextsize());
+//        textView.setTextSize( TypedValue.COMPLEX_UNIT_PX ,textViewToolBean.getTextsize());
+        //        TypedValue.COMPLEX_UNIT_PX : Pixels
+//        TypedValue.COMPLEX_UNIT_SP : Scaled Pixels
+//        TypedValue.COMPLEX_UNIT_DIP : Device Independent Pixels
         textView.setTextColor(commonBean.getContext().getResources().getColor(R.color.whithe));
         rootlayout.addView(textView);
         commonBean.getLayout().addView(rootlayout);

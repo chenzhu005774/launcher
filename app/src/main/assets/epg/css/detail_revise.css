@@ -1,0 +1,27 @@
+#title_0 {
+    font-size: 32px;
+    line-height: 49px;
+}
+
+#title_1 {
+    font-size: 20px;
+    line-height: 29px;
+}
+
+#contenter_inner {
+    font-size: 26px;
+    line-height: 45px !important;
+}
+
+#contenter_inner p {
+    line-height: 45px !important;
+}
+
+#contenter_inner span {
+    line-height: 45px !important;
+}
+
+.empty {
+    line-height: 247px;
+    font-size: 32px;
+}

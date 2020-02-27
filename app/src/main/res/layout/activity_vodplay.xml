@@ -45,6 +45,7 @@
 
 
         <ImageView
+            android:visibility="invisible"
             android:descendantFocusability="beforeDescendants"
             android:padding="10px"
             android:focusableInTouchMode="true"
@@ -73,6 +74,7 @@
             android:layout_height="50px" />
 
         <ImageView
+            android:visibility="invisible"
             android:descendantFocusability="beforeDescendants"
             android:layout_toRightOf="@id/playpause"
             android:padding="10px"

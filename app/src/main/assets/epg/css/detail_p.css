@@ -1,0 +1,94 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+}
+
+#box {
+    position: relative;
+    width: 1280px;
+    height: 720px;
+    background-color: #333333;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#bgBanner {
+    width: 1280px;
+    height: 720px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    text-align: center;
+    line-height: 720px;
+    overflow: hidden;
+    display: table;
+    font-size: 0;
+}
+
+.bgBannerImg {
+    display: none;
+    max-width: 1280px;
+    max-height: 720px;
+    vertical-align: middle;
+}
+
+.bgBanner_left {
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    left: 39px;
+    top: 334px;
+}
+
+.bgBanner_right {
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    right: 39px;
+    top: 334px;
+}
+
+.bgBanner_pic_span {
+    width: 1100px;
+    height: 23px;
+    position: absolute;
+    top: 660px;
+    left: 90px;
+    text-align: center;
+    line-height: 23px;
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.empty {
+    text-align: center;
+    line-height: 560px;
+    font-size: 30px;
+    color: #ffffff;
+}
+
+.bgImgMiddle {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.title,.title1{
+    position: absolute;
+    right:40px;
+    bottom:40px;
+    height:28px;
+    font-size:20px;
+    font-weight:400;
+    line-height:24px;
+    color:#fff;
+    opacity:1;
+}
+.title1{
+    right:39px;
+    bottom:39px;
+    color:#000;
+}

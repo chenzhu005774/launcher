@@ -42,7 +42,6 @@ public class WebviewPresenter extends BasePresenterImpl<WebviewContract.View> im
             }
         });
 
-        mView.loadurl(webview);
 
     }
 }

@@ -13,7 +13,6 @@ import com.amtzhmt.launcher.mvp.BaseView;
 
 public class WebviewContract {
     interface View extends BaseView {
-     void loadurl(WebView webview);
     }
 
     interface  Presenter extends BasePresenter<View> {

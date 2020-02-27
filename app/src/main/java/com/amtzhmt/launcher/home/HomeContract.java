@@ -15,6 +15,8 @@ public class HomeContract {
     interface View extends BaseView {
        void  inintSuccess();
        void initFail();
+       void needUpdateApk(String url);
+       void unneedUpdateApk(String message);
     }
 
     interface  Presenter extends BasePresenter<View> {
@@ -24,6 +26,8 @@ public class HomeContract {
         void  pause();
         void start();
         void startClien(Context context);
+
+        void getUpdateApkinfo( int version);
 
     }
 }

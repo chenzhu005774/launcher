@@ -86,7 +86,6 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
 
     @Override
     public void getvoddataSuccess() {
-//        http://v.ysbang.cn//data/video/2015/rkb/2015rkb01.mp4
         channelplay.setVideoURI(Uri.parse("http://192.168.2.40:9000/kzm.ts"));
     }
 

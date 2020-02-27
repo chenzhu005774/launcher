@@ -4,16 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/hint"
+    android:background="@mipmap/bg"
     android:id="@+id/catalogroot">
 
     <TextView
         android:textSize="35sp"
         android:layout_centerHorizontal="true"
-        android:text="系统弹窗标题"
+        android:text="系统消息通知"
         android:id="@+id/dialog_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_marginRight="50px"
+        android:layout_marginLeft="50px"
+        android:layout_below="@+id/dialog_text"
+        android:layout_above="@+id/dialog_sure"
+        android:text=""
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <Button
         android:text="确认"

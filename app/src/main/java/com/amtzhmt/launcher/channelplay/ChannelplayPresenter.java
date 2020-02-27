@@ -1,8 +1,10 @@
 package com.amtzhmt.launcher.channelplay;
 import android.os.Handler;
 import android.view.View;
+import android.widget.TextView;
 
 import com.amtzhmt.launcher.mvp.BasePresenterImpl;
+import com.amtzhmt.launcher.util.utils.LogUtils;
 import com.amtzhmt.launcher.util.utils.bean.ChannelEntity;
 import com.amtzhmt.launcher.util.utils.bean.CustomerEntity;
 import com.amtzhmt.launcher.util.utils.net.Api;
@@ -30,6 +32,17 @@ public class ChannelplayPresenter extends BasePresenterImpl<ChannelplayContract.
         public void run() {
             if (mView!=null) {
                 mView.controllerView();
+            }
+        }
+    };
+//    频道号实时显示 ，频道延时显示
+    String chanernumber="";
+    Runnable chanelrun = new Runnable() {
+        @Override
+        public void run() {
+            if (mView!=null) {
+                mView.setchoiceChanel(Integer.valueOf(chanernumber));
+                chanernumber="";
             }
         }
     };
@@ -71,9 +84,28 @@ public class ChannelplayPresenter extends BasePresenterImpl<ChannelplayContract.
     }
 
     @Override
-    public void timeSend() {
+    public void timeSend(View view) {
+        view.setVisibility(View.VISIBLE);
         handler.removeCallbacks(runnable);
         handler.postDelayed(runnable,3000);
+    }
+
+
+
+    @Override
+    public void choiceChanel(String  number , TextView view) {
+        if (chanernumber.length()==0&&Integer.valueOf(number)==0){
+         // 开头就输入0 舍弃
+            return;
+        }
+        if (chanernumber.length()>2){
+            // 只能输入两位数
+            return;
+        }
+        chanernumber+=number;
+        mView.showchoiceChanel(Integer.valueOf(chanernumber));
+        handler.removeCallbacks(chanelrun);
+        handler.postDelayed(chanelrun,2000);
     }
 
 }

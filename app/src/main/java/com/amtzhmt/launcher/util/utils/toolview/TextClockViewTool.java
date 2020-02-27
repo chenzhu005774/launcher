@@ -41,15 +41,16 @@ public class TextClockViewTool {
         textClock.setGravity(Gravity.CENTER);
 //        textClock.setFormat12Hour("yyyy.MM.dd\nEE a hh:mm");
         //a 表示上下午
-//        if(textClockViewToolBean.getFormattype()!=null&&!textClockViewToolBean.getFormattype().equals("")) {
-//            textClock.setFormat12Hour(textClockViewToolBean.getFormattype());
-//        }else {
+
             String format = "yyyy.MM.dd EE hh:mm";
             format = textClockViewToolBean.getFormattype();
-            textClock.setTextSize(textClockViewToolBean.getTextsize());
+        if (format.contains("yyyy")||format.contains("YYYY")) {
+            textClock.setFormat12Hour("yyyy-MM-dd EE");
+        }else {
             textClock.setFormat12Hour(format);
-//        }
-        textClock.setGravity(Gravity.CENTER);
+        }
+            textClock.setTextSize(textClockViewToolBean.getTextsize());
+        textClock.setGravity(Gravity.RIGHT);
         textClock.setTextSize(textClockViewToolBean.getTextsize());
         textClock.setTextColor(commonBean.getContext().getResources().getColor(R.color.whithe));
         rootlayout.addView(textClock);

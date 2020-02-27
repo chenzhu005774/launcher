@@ -31,6 +31,8 @@ import java.security.GeneralSecurityException;
  *更新工具类
  */
 public class UpdateManager {
+//   将apk放到system/app后
+//   https://blog.csdn.net/dahailantian1/article/details/78584686
 
 //   Environment.getDataDirectory() = /data
 //   Environment.getDownloadCacheDirectory() = /cache

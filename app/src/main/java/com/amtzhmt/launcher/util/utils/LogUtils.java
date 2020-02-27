@@ -203,7 +203,7 @@ public class LogUtils {
         }
     }
 
-    public static void showWindowManagerDialog(Context context){
+    public static void showWindowManagerDialog(Context context,String content){
         final WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         final  WindowManager.LayoutParams para = new WindowManager.LayoutParams();
 
@@ -218,6 +218,8 @@ public class LogUtils {
         para.type = WindowManager.LayoutParams.TYPE_TOAST;
         final View contentView = LayoutInflater.from(context).inflate(R.layout.system_dialog_view, null);
         Button tvDlgBtn = (Button) contentView.findViewById(R.id.dialog_sure);
+        TextView contenttext = (TextView)contentView.findViewById(R.id.content);
+        contenttext.setText(content);
         tvDlgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

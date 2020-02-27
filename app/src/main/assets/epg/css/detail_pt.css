@@ -1,0 +1,256 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+}
+
+#box,
+.bgImg {
+    width: 1280px;
+    height: 720px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+}
+
+#title_0 {
+    width: 1100px;
+    height: 42px;
+    color: #ffffff;
+    font-size: 30px;
+    position: absolute;
+    left: 90px;
+    top: 60px;
+    text-align: center;
+    line-height: 42px;
+}
+
+#title_1 {
+    width: 1100px;
+    height: 25px;
+    font-size: 18px;
+    position: absolute;
+    left: 90px;
+    top: 122px;
+    text-align: center;
+    font-weight: 400;
+    line-height: 22px;
+    color: #AAB3D3;
+    opacity: 1;
+}
+
+#content {
+    width: 400px;
+    height: 380px;
+    overflow: hidden;
+    position: relative;
+    top: 207px;
+    left: 795px;
+}
+
+#contenter_inner {
+    width: 400px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    font-size: 24px;
+    color: #ffffff !important;
+    line-height: 38px !important;
+}
+
+#contenter_inner p {
+    margin: 0;
+    line-height: 38px !important;
+    color: #fff !important;
+    /* background-image: url(../img/transparent.png); */
+}
+
+#contenter_inner span {
+    line-height: 38px !important;
+    color: #fff !important;
+}
+
+#line {
+    width: 5px;
+    height: 380px;
+    position: absolute;
+    left: 1225px;
+    top: 207px;
+    background-color: #AAB3D3;
+}
+
+#banner {
+    width: 640px;
+    height: 380px;
+    position: absolute;
+    top: 208px;
+    left: 85px;
+    line-height: 380px;
+    text-align: center;
+    font-size: 0;
+    display: table;
+    background-image: url(../img/pic_mb.png)
+}
+
+#banner .title {
+    height: 10px;
+    margin: 0;
+    position: absolute;
+    right: 10px;
+    bottom: 15px;
+    z-index: 4;
+}
+
+#banner .title .nr {
+    list-style: none;
+    width: 10px;
+    height: 10px;
+    float: left;
+    margin-right: 10px;
+    background-image: url(../img/point.png);
+}
+
+#banner .title .active {
+    background-image: url(../img/point_active.png);
+}
+
+.banner_left {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: -30px;
+    top: 180px;
+}
+
+.banner_right {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: -30px;
+    top: 180px;
+}
+
+.bannerImg {
+    max-width: 640px;
+    max-height: 380px;
+    vertical-align: middle;
+}
+
+.banner_img {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+}
+
+.pic_bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.banner_span {
+    font-size: 20px;
+    color: #ffffff;
+    position: absolute;
+    right: 20px;
+    bottom: 0;
+    z-index: 4;
+    line-height: 40px;
+}
+
+#tip {
+    width: 1110px;
+    height: 25px;
+    font-size: 18px;
+    text-align: center;
+    position: absolute;
+    left: 85px;
+    top: 661px;
+    font-weight: 400;
+    line-height: 22px;
+    color: #AAB3D3;
+    opacity: 1;
+}
+
+/*大图模式*/
+#bgBanner {
+    width: 1020px;
+    height: 456px;
+    position: absolute;
+    left: 130px;
+    top: 167px;
+    text-align: center;
+    line-height: 456px;
+    overflow: hidden;
+    display: table;
+}
+
+.bgBannerImg {
+    display: none;
+    max-width: 1020px;
+    max-height: 456px;
+    vertical-align: middle;
+}
+
+.bgBanner_left {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 60px;
+    top: 385px;
+}
+
+.bgBanner_right {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 1220px;
+    top: 385px;
+}
+
+.bgBanner_pic_span {
+    width: 1100px;
+    height: 23px;
+    position: absolute;
+    top: 660px;
+    left: 90px;
+    text-align: center;
+    line-height: 23px;
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.empty {
+    text-align: center;
+    line-height: 560px;
+    font-size: 30px;
+    color: #ffffff;
+}
+
+.imgMiddle {
+    display: none;
+    vertical-align: middle;
+}
+
+.imgMiddle.active {
+    display: table-cell;
+}
+
+.bgImgMiddle {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.line_span {
+    position: absolute;
+    top: 0;
+    width: 5px;
+    height: 40px;
+    background-color: #ffffff;
+}

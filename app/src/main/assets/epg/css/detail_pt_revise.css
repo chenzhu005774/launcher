@@ -1,0 +1,41 @@
+#title_0 {
+    font-size: 32px;
+    line-height: 49px;
+}
+
+#title_1 {
+    font-size: 20px;
+    line-height: 29px;
+}
+
+#contenter_inner {
+    font-size: 26px;
+    line-height: 45px !important;
+}
+
+#contenter_inner p {
+    line-height: 45px !important;
+}
+
+#contenter_inner span {
+    line-height: 45px !important;
+}
+
+.banner_span {
+    font-size: 22px;
+}
+
+#tip {
+    font-size: 20px;
+    line-height: 29px;
+}
+
+.banner_pic_span {
+    line-height: 30px;
+    font-size: 22px;
+}
+
+.empty {
+    line-height: 567px;
+    font-size: 32px;
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>列表页</title>
+    <meta charset="UTF-8">
+    <meta name="page-view-size" content="1280*720" />
+</head>
+<link rel="stylesheet" href="css/list.css">
+
+<body bgcolor="transparent" style="background-color:transparent;">
+    <img class='bgImg' src="img/bg.png" />
+    <div id="box">
+        <div id="top">
+            <span id="title" class="top_title">新闻动态</span>
+            <span id="weektime" class="top_time">20:33</span>
+        </div>
+        <!-- 左侧 -->
+        <div id="left" class="left"></div>
+        <!-- 右侧 -->
+        <div id="rightContanier">
+            <ul id="right" class="right"></ul>
+        </div>
+        <!-- 滚动条 -->
+        <div id="scrollbar" class='scrollbar'>
+            <img src="img/slider_bg.png" alt="">
+            <span id="slider" class='slider'>
+                <img src="img/slider.png" alt="">
+            </span>
+        </div>
+        <div id="empty">暂无数据</div>
+    </div>
+    <script src="js/common/dataGetter.js"></script>
+    <script src="js/common/tools.js"></script>
+    <script src="js/common/keyEvent.js"></script>
+    <script src="js/module/list.js"></script>
+</body>
+
+</html>

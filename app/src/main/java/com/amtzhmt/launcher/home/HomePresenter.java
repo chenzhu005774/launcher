@@ -8,10 +8,12 @@ import android.widget.Toast;
 
 import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.push.clientService;
+import com.amtzhmt.launcher.util.utils.bean.ChannelEntity;
 import com.amtzhmt.launcher.util.utils.bean.ListItemBean;
 import com.amtzhmt.launcher.util.utils.commonbean.CommonBean;
 import com.amtzhmt.launcher.util.utils.image.ViewbgLoader;
 import com.amtzhmt.launcher.mvp.BasePresenterImpl;
+import com.amtzhmt.launcher.util.utils.net.Api;
 import com.amtzhmt.launcher.util.utils.toolview.BannerViewTool;
 import com.amtzhmt.launcher.util.utils.toolview.BannerViewToolBean;
 import com.amtzhmt.launcher.util.utils.toolview.ImageViewTool;
@@ -36,6 +38,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * MVPPlugin
@@ -261,7 +268,7 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
                         if (itemcJson.getJSONObject("resource").getJSONArray("resourceData").length()!=0) {
                             videoViewToolBean.setUrl(itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getString("url"));
                         }else {
-                            videoViewToolBean.setUrl("http://192.168.2.120:9901/tsfile/live/0001_2.m3u8?key=txiptv&playlive=1&down=1");
+                            videoViewToolBean.setUrl("http://192.168.2.170:9901/tsfile/live/0009_1.m3u8?key=txiptv&playlive=1&authid=0");
                         }
                         commonBean.setTag(videoViewToolBean);
                         videoViewTool.creatview(videoViewToolBean,commonBean);
@@ -311,6 +318,41 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
             }
         },1* 1000);
 
+    }
+
+    @Override
+    public void getUpdateApkinfo(final int version) {
+        Api.getDefault().getApkInfo(1,100).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                String result = null;
+                JSONObject jSONObject = null;
+                try {
+                    result = response.body().string();
+                    jSONObject = new JSONObject(result);
+                    JSONArray data = jSONObject.getJSONObject("data").getJSONArray("pageRecords");
+                    if (data.length()!=0){
+                        JSONObject jsonObject = data.getJSONObject(0);
+                        String onlineVersion = jsonObject.getString("version");
+                        if (Integer.valueOf(onlineVersion)>Integer.valueOf(version)){
+                           //  需要升级
+                            mView.needUpdateApk(jsonObject.getJSONObject("url").getString("url"));
+                        }else {
+                            // 不需要升级
+                            mView.unneedUpdateApk("当前launcher为最新桌面");
+                        }
+                    }
+                } catch ( Exception e) {
+                    e.printStackTrace();
+                    mView.unneedUpdateApk("获取桌面版本信息解析失败");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                mView.unneedUpdateApk("获取桌面版本失败");
+            }
+        });
     }
 
 

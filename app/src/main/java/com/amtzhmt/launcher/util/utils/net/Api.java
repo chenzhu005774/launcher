@@ -1,5 +1,6 @@
 package com.amtzhmt.launcher.util.utils.net;
 
+import com.amtzhmt.launcher.util.utils.Constant;
 import com.amtzhmt.launcher.util.utils.LogUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,11 +27,7 @@ public class Api {
     private static Api retrofitManager = null;
     public ApiService movieService;
 
-    String HOST = "http://gank.io/";
-    String API_SERVER_URL = HOST + "api/data/";
-//    private final String basUrl=API_SERVER_URL;
-   private final String basUrl = "http://192.168.2.207:1790/industry-iptv-api/";
-//    private final String basUrl = "http://192.168.2.183:8081/industry-iptv-api/";
+    private final String basUrl = Constant.BASEURL;
 
     /**
      * 构造方法私有化

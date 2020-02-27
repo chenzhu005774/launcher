@@ -1,12 +1,7 @@
 package com.amtzhmt.launcher.push;
 
-import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.KeyEvent;
 
 import com.amtzhmt.launcher.App;
@@ -34,10 +29,11 @@ public class MyUdpClient extends UDPClientBase {
 			LogUtils.i("msg is null");
 		}
 		if(true) {
+            //1xxxxxxxxxxxx \n 2xxxxxxxxxxxxxx 3xxxxxxxxxxxxx\n
 			String str = null;
 			str = message.getData();
 			LogUtils.i("AMTPush自定义推送信息:" + str+" bbbbbbbbbbbb "+App.context);
-			LogUtils.showWindowManagerDialog(App.context);
+			LogUtils.showWindowManagerDialog(App.context,str);
 		}
 	}
 

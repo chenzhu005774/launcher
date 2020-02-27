@@ -2,6 +2,7 @@ package com.amtzhmt.launcher.home;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
@@ -46,12 +47,18 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
         result = data;
         mPresenter.initData(result,this,this,parentlayout);
         mPresenter.startClien(this); //开启心跳 连接
+        //升级
+        mPresenter.getUpdateApkinfo(LogUtils.getVersionCode(this));
     }
 
     @Override
     public void inintSuccess() {
         int versioncode =LogUtils.getVersionCode(this);
-        LogUtils.showDialog(this,"this version:"+versioncode);
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        int screenWidth = dm.widthPixels;
+        int screenHeight = dm.heightPixels;
+        LogUtils.showDialog(this,"this APK version:"+versioncode+" 基带版本："+android.os.Build.VERSION.INCREMENTAL+"\n"
+                +"分辨率:"+screenWidth+"*"+screenHeight);
         PLAYSTATUS = Constant.PLAY;
     }
 
@@ -59,7 +66,6 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
     public void initFail() {
     LogUtils.toast(this,"布局失败...:"+getMacDefault(this));
     LogUtils.showDialog(this,"布局失败,点击重试",this);
-//    startActivity(new Intent(this,ChannelplayActivity.class));
     LogUtils.i("build.prop info :"+android.os.Build.VERSION.RELEASE+LogUtils. getSystemProperty("build.prop")+"\n"+
         //VERSION.RELEASE 固件版本
         ", VERSION.RELEASE: " + android.os.Build.VERSION.RELEASE+"\n"+
@@ -67,6 +73,16 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
          //VERSION.INCREMENTAL 基带版本
         ", VERSION.INCREMENTAL: " + android.os.Build.VERSION.INCREMENTAL+"\n"
         )   ;
+    }
+
+    @Override
+    public void needUpdateApk(String url) {
+        new UpdateManager(HomeActivity.this,1).showDialog(url,"1.更新桌面应用 \n 2.修复若干bug ");
+    }
+
+    @Override
+    public void unneedUpdateApk(String message) {
+       LogUtils.toast(this,message);
     }
 
     @Override

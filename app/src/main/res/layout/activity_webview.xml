@@ -6,10 +6,11 @@
     android:background="@mipmap/bg"
     tools:context="com.amtzhmt.launcher.MainActivity">
 
-  <WebView
-    android:id="@+id/webview"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+  <FrameLayout
+      android:background="@mipmap/bg"
+      android:id="@+id/framelayout_main"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
 
 
 </RelativeLayout>

@@ -68,13 +68,29 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
             channelplay.setVideoURI(Uri.parse(data));
         }
         channelNumtxt.setText(channelIndex+1+"");
-        mPresenter.timeSend();
+        mPresenter.timeSend(channelNumtxt);
     }
 
     @Override
     public void controllerView() {
       //        控制播放的视图
         channelNumtxt.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showchoiceChanel(int number) {
+        channelNumtxt.setText(number+"");
+        mPresenter.timeSend(channelNumtxt);
+    }
+
+    @Override
+    public void setchoiceChanel(int number) {
+        if (channelEntities.size()==0||number>channelEntities.size()){
+            return;
+        }else {
+            channelplay.setVideoURI(Uri.parse(channelEntities.get(number-1).getUrl()));
+            channelIndex=(number-1);
+        }
     }
 
     @Override
@@ -114,7 +130,7 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
                 }
                 channelplay.setVideoURI(Uri.parse(channelEntities.get(channelIndex).getUrl()));
                 channelNumtxt.setText(channelIndex+1+"");
-                mPresenter.timeSend();
+                mPresenter.timeSend(channelNumtxt);
                 return true;
             }else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN||keyCode==167){
                 channelIndex-=1;
@@ -122,19 +138,36 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
                     channelIndex=totalNum-1;
                 }
                 channelplay.setVideoURI(Uri.parse(channelEntities.get(channelIndex).getUrl()));
-//                channelplay.setVideoURI(Uri.parse("http://192.168.2.40:9000/mov_bbb.mp4"));
                 channelNumtxt.setText(channelIndex+1+"");
                 LogUtils.i("isnull--?"+channelNumtxt);
-                mPresenter.timeSend();
-
+                mPresenter.timeSend(channelNumtxt);
                 return true;
             }else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT){
                 return true;
             }else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
                 return true;
-            }else if(keyCode==184){
-                startAPP("com.android.settings");
-            }else {
+            }else if ( KeyEvent.KEYCODE_0==keyCode){
+                mPresenter.choiceChanel("0",channelNumtxt);
+            }else if ( KeyEvent.KEYCODE_1==keyCode){
+                mPresenter.choiceChanel("1",channelNumtxt);
+            }else if ( KeyEvent.KEYCODE_2==keyCode){
+                mPresenter.choiceChanel("2",channelNumtxt);
+            }else if ( KeyEvent.KEYCODE_3==keyCode){
+                mPresenter.choiceChanel("3",channelNumtxt);
+            }else if ( KeyEvent.KEYCODE_4==keyCode){
+                mPresenter.choiceChanel("4",channelNumtxt);
+            }else if ( KeyEvent.KEYCODE_5==keyCode){
+                mPresenter.choiceChanel("5",channelNumtxt);
+            }else if ( KeyEvent.KEYCODE_6==keyCode){
+                mPresenter.choiceChanel("6",channelNumtxt);
+            }else if ( KeyEvent.KEYCODE_7==keyCode){
+                mPresenter.choiceChanel("7",channelNumtxt);
+            }else if ( KeyEvent.KEYCODE_8==keyCode){
+                mPresenter.choiceChanel("8",channelNumtxt);
+            }else if ( KeyEvent.KEYCODE_9==keyCode){
+                mPresenter.choiceChanel("9",channelNumtxt);
+            }
+            else {
                 return super.onKeyDown(keyCode, event);
             }
 
@@ -142,12 +175,5 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
         return super.onKeyDown(keyCode, event);
     }
 
-    public void startAPP(String appPackageName){
-        try{
-            Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(appPackageName);
-            getContext().startActivity(intent);
-        }catch(Exception e){
-            Toast.makeText(getContext(), "没有安装", Toast.LENGTH_LONG).show();
-        }
-    }
+
 }
