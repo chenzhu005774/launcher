@@ -10,6 +10,11 @@ import android.support.annotation.Nullable;
 
 import com.amtzhmt.launcher.util.utils.Constant;
 import com.amtzhmt.launcher.util.utils.LogUtils;
+import com.amtzhmt.launcher.util.utils.bean.CustomerEntity;
+import com.amtzhmt.launcher.util.utils.sqlite.CustomerInfoDB;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2018/1/12.
@@ -40,10 +45,11 @@ public class clientService extends Service {
             @Override
             public void run() {
                 try{
-                    String username = "12345567890";
+                    final CustomerInfoDB customerInfoDB = new CustomerInfoDB(context);
+                    CustomerEntity customerEntity = customerInfoDB.getAllObject().get(0);
+                    String username =customerEntity.getName();
                     LogUtils.i("username = "+username);
-//                    MyUdpClient myUdpClient = new MyUdpClient(OriginalUtil.MD5(username),1,"192.168.2.40",8092,context);
-                    MyUdpClient myUdpClient = new MyUdpClient("12345567890"+Constant.KEY,1, Constant.serviceIP,Constant.POTR,context);
+                    MyUdpClient myUdpClient = new MyUdpClient(username+Constant.KEY,1, Constant.serviceIP,Constant.POTR,context);
                     myUdpClient.setHeartbeatInterval(30);
                     myUdpClient.start();
                     synchronized(myUdpClient){

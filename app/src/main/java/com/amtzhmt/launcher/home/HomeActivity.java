@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.catalog.CatalogActivity;
 import com.amtzhmt.launcher.channelplay.ChannelplayActivity;
+import com.amtzhmt.launcher.util.utils.CleanMessageUtil;
 import com.amtzhmt.launcher.util.utils.Constant;
 import com.amtzhmt.launcher.util.utils.DialogCallback;
 import com.amtzhmt.launcher.util.utils.UpdateManager;
@@ -57,8 +58,7 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
         DisplayMetrics dm = getResources().getDisplayMetrics();
         int screenWidth = dm.widthPixels;
         int screenHeight = dm.heightPixels;
-        LogUtils.showDialog(this,"this APK version:"+versioncode+" 基带版本："+android.os.Build.VERSION.INCREMENTAL+"\n"
-                +"分辨率:"+screenWidth+"*"+screenHeight);
+        LogUtils.showDialog(this,"this APK version:"+versioncode+" 基带版本："+android.os.Build.VERSION.INCREMENTAL);
         PLAYSTATUS = Constant.PLAY;
     }
 
@@ -77,7 +77,7 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
 
     @Override
     public void needUpdateApk(String url) {
-        new UpdateManager(HomeActivity.this,1).showDialog(url,"1.更新桌面应用 \n 2.修复若干bug ");
+        new UpdateManager(HomeActivity.this,1).showDialog(Constant.UPDATEHTTP+url,"1.更新桌面应用 \n2.修复若干bug ");
     }
 
     @Override
@@ -126,13 +126,16 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
-            new UpdateManager(HomeActivity.this,1).showDialog("http://192.168.2.40:9000/new.apk","1.本次apk升级 \n 2.修复若干bug ");
-            return true;
-        }else if(keyCode ==82){
+//        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+//            new UpdateManager(HomeActivity.this,1).showDialog("http://192.168.2.183:8081/file/downFile/c30a5444087e41459ba3eca1d901a2f0","1.本次apk升级 \n 2.修复若干bug ");
+//            return true;
+//        }else
+        if(keyCode ==KeyEvent.KEYCODE_0){
             //首页按键 开始系统升级 com.inpor.fmctv.activity.LoginActivity
             new UpdateManager(HomeActivity.this,2).showDialog("http://192.168.2.40:9000/systemimg.zip","1.本次系统升级 \n 2.修复若干bug ");
 //            mPresenter.jumpApk("com.inpor.fmctv",this);
+        }else if (keyCode ==KeyEvent.KEYCODE_1){
+            CleanMessageUtil.clearAllCache(getApplicationContext());
         }
 
         return super.onKeyDown(keyCode, event);

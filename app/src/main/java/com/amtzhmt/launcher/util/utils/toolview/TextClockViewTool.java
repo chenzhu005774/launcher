@@ -45,7 +45,10 @@ public class TextClockViewTool {
             String format = "yyyy.MM.dd EE hh:mm";
             format = textClockViewToolBean.getFormattype();
         if (format.contains("yyyy")||format.contains("YYYY")) {
-            textClock.setFormat12Hour("yyyy-MM-dd EE");
+            format = format.replace("YYYY","yyyy");
+            format = format.replace("MM","mm");
+            format = format.replace("DD","dd");
+            textClock.setFormat12Hour(format);
         }else {
             textClock.setFormat12Hour(format);
         }

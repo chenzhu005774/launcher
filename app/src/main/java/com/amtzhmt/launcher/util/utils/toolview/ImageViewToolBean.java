@@ -22,6 +22,10 @@ public class ImageViewToolBean {
 
     // 跳转url
     String jumpurl;
+    // 内容类型   资源类型（0：文字，1：医师图文，2：常规图文，3：图片详情，4：视频
+    int contentType;
+    //  绑定的是栏目还是 内容 1 是栏目 2是内容
+    int bindType;
 
 
     public int getWidth() {
@@ -102,5 +106,21 @@ public class ImageViewToolBean {
 
     public void setJumpurl(String jumpurl) {
         this.jumpurl = jumpurl;
+    }
+
+    public int getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(int contentType) {
+        this.contentType = contentType;
+    }
+
+    public int getBindType() {
+        return bindType;
+    }
+
+    public void setBindType(int bindType) {
+        this.bindType = bindType;
     }
 }

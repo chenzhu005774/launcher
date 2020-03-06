@@ -86,7 +86,8 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
 
     @Override
     public void getvoddataSuccess() {
-        channelplay.setVideoURI(Uri.parse("http://192.168.2.40:9000/kzm.ts"));
+        String url = Constant.VIDEOEHTTP+getIntent().getStringExtra("url");
+        channelplay.setVideoURI(Uri.parse(url));
     }
 
     @Override
@@ -98,13 +99,19 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
     public void updateView() {
          cur= channelplay.getCurrentPosition();
          total= channelplay.getDuration();
+
         time.setText(mPresenter.changeTimeFormat(cur)+"/"+mPresenter.changeTimeFormat(total));
        // 创建一个数值格式化对象
         NumberFormat numberFormat = NumberFormat.getInstance();
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(0);
-        String result = numberFormat.format((float)cur/(float)total*100);
-        progressbar.setProgress(Integer.valueOf(result));
+        try {
+            String result = numberFormat.format((float)cur/(float)total*100);
+            progressbar.setProgress(Integer.valueOf(result));
+        }catch (Exception e){
+            LogUtils.d("设置时间出错："+channelplay.getDuration());
+        }
+
     }
 
     @Override

@@ -46,6 +46,38 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
         jumpurl=intent.getStringExtra("jumpurl");
         LogUtils.i("-->-->-->:"+intent.getStringExtra("jumpurl")+"--|||||||--"+jumpurl);
         addWeb(jumpurl);
+
+//        WebView webView =   (WebView) findViewById(R.id.webview);
+//        //添加js接口，指明供js调用的对象和名称
+//        webView.addJavascriptInterface(this, "MediaPlayer");
+//
+//
+//        WebSettings settings = webView.getSettings();
+//        settings.setJavaScriptCanOpenWindowsAutomatically(true);//设置js可以直接打开窗口，如window.open()，默认为false
+//        settings.setJavaScriptEnabled(true);//是否允许执行js，默认为false。设置true时，会提醒可能造成XSS漏洞
+//        settings.setSupportZoom(true);//是否可以缩放，默认true
+//        settings.setBuiltInZoomControls(true);//是否显示缩放按钮，默认false
+//        settings.setUseWideViewPort(true);//设置此属性，可任意比例缩放。大视图模式
+//        settings.setLoadWithOverviewMode(true);//和setUseWideViewPort(true)一起解决网页自适应问题
+//        settings.setAppCacheEnabled(true);//是否使用缓存
+//        settings.setDomStorageEnabled(true);//DOM Storage
+//        settings.setSupportMultipleWindows(true);
+//
+//        webView.setBackgroundColor(0);
+//        webView.getSettings().setSupportMultipleWindows(true);
+//        //启用js支持
+//        webView.getSettings().setJavaScriptEnabled(true);
+//        //添加js接口，指明供js调用的对象和名称
+//        webView.setWebViewClient(new WebViewClient(){
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                view.loadUrl(url);
+//                return true;
+//            }
+//        });
+//
+//        webView.loadUrl("file:///android_asset/test.html");
+
     }
 
 
@@ -62,6 +94,8 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
         WebSettings webSettings = mWeb.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
+        mWeb.requestFocus();
+        mWeb.setFocusable(true);
         mWeb.setWebChromeClient(new WebChromeClient());
         mWeb.setWebViewClient(new WebViewClient(){
             @Override
@@ -108,8 +142,11 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
 
     @JavascriptInterface
     public void playVideo(String  url) {
-        LogUtils.toast(this,"form js html playvideo");
-        startActivity(new Intent(this, VodplayActivity.class));
+        LogUtils.toast(this,"form js html playvideo:"+url);
+        Intent intent = new Intent();
+        intent.setClass(this,VodplayActivity.class);
+        intent.putExtra("url",url);
+        startActivity(intent);
     }
 
 }

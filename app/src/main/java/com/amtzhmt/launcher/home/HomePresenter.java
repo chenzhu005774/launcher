@@ -189,8 +189,11 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
                         }else {
                             imageViewToolBean_f.setFocuspicurl("");
                         }
+//
                         if (!itemcJson.getString("resource").equals("null")&&itemcJson.getString("resource")!=null
                             &&itemcJson.getJSONObject("resource").getJSONArray("resourceData").length()!=0) {
+                            imageViewToolBean_f.setBindType(itemcJson.getJSONObject("resource").getInt("type"));
+                            imageViewToolBean_f.setContentType(itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getInt("type"));
                             String customercode = itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getString("customerCode");
                             String parentcode = itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getString("code");
                             String url = itemcJson.getJSONObject("data").getString("url");

@@ -243,7 +243,9 @@ public abstract class UDPClientBase implements Runnable {
 		LogUtils.i("length--->"+new String(data).trim());
         MessageAttribute info =new Username(data);
         messageHeader.addMessageAttribute(info);
-        byte[] sendData = messageHeader.getBytes();
+        byte[] sendData = data.getBytes();
+//        byte[] sendData = messageHeader.getBytes();
+		LogUtils.i("length--->sendData"+new String(sendData).trim());
 
 		DatagramPacket dp = new DatagramPacket(sendData,sendData.length);
 		dp.setSocketAddress(ds.getRemoteSocketAddress());
