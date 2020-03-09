@@ -46,7 +46,7 @@ public class TextClockViewTool {
             format = textClockViewToolBean.getFormattype();
         if (format.contains("yyyy")||format.contains("YYYY")) {
             format = format.replace("YYYY","yyyy");
-            format = format.replace("MM","mm");
+//            format = format.replace("MM","mm");
             format = format.replace("DD","dd");
             textClock.setFormat12Hour(format);
         }else {

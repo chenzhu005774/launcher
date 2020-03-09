@@ -10,6 +10,18 @@ public class Constant {
     public static String pichttp="http://192.168.2.183:8081";
     public static String UPDATEHTTP="http://192.168.2.183:8081/file/";
     public static String VIDEOEHTTP="http://192.168.2.183:8081/file/";
+
+    //栏目 epg二级页面
+    public static String CATALOGEPGURL="http://192.168.2.183:8081/epg/list.html?";
+    //栏目 epg二级页面
+    public static String TEXT="http://192.168.2.183:8081/epg/detail.html?";
+    public static String PIC_TEXT="http://192.168.2.183:8081/epg/detail_pt.html?";
+    public static String PIC="http://192.168.2.183:8081/epg/detail_img.html?";
+
+
+
+//    http://192.168.2.183:8081/epg/detail_pt.html
+
     public static int PAUSE =0;
     public static int PLAY=1;
     public static int UNINIT=-1;

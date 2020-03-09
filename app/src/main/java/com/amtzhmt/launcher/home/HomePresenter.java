@@ -200,7 +200,31 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
                             if(url.isEmpty()){
                                 imageViewToolBean_f.setJumpurl("");
                             }else {
-                                imageViewToolBean_f.setJumpurl(url+"?cpCode="+customercode+"&parentCode="+parentcode);
+                                if (imageViewToolBean_f.getBindType()==1){
+                                    imageViewToolBean_f.setJumpurl(Constant.CATALOGEPGURL+"cpCode="+customercode+"&parentCode="+parentcode);
+                                }else {
+                                    switch (imageViewToolBean_f.getContentType()){
+                                        case 0:
+                                            imageViewToolBean_f.setJumpurl(Constant.TEXT+"code="+parentcode);
+                                            break;
+                                        case 1:
+                                            imageViewToolBean_f.setJumpurl(Constant.PIC_TEXT+"code="+parentcode);
+                                            break;
+                                        case 2:
+                                            imageViewToolBean_f.setJumpurl(Constant.PIC_TEXT+"code="+parentcode);
+                                            break;
+                                        case 3:
+                                            imageViewToolBean_f.setJumpurl(Constant.PIC+"code="+parentcode);
+                                            break;
+                                        case 4:
+//                                            视频fileVideo/VideoShow/4573f16ce00745d290e517f5e491a566 videoUrl
+                                            String videovURl = itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getString("videoUrl");
+                                            imageViewToolBean_f.setJumpurl(videovURl);
+                                            break;
+                                    }
+
+                                }
+
                             }
 
                         }else {

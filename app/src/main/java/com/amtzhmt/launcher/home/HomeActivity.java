@@ -109,10 +109,18 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
 
             mPresenter.pause();
             PLAYSTATUS = Constant.PAUSE;
-            Intent intent = new Intent(this, WebviewActivity.class);
-            intent.putExtra("jumpurl",((ImageViewToolBean) object).getJumpurl());
-            LogUtils.i("-->-->-->:"+((ImageViewToolBean) object).getJumpurl());
-            startActivity(intent);
+
+            if (((ImageViewToolBean) object).getContentType()==4){
+                Intent intent = new Intent();
+                intent.setClass(this,VodplayActivity.class);
+                intent.putExtra("url",((ImageViewToolBean) object).getJumpurl());
+                startActivity(intent);
+            }else {
+                Intent intent = new Intent(this, WebviewActivity.class);
+                intent.putExtra("jumpurl", ((ImageViewToolBean) object).getJumpurl());
+                LogUtils.i("-->-->-->:" + ((ImageViewToolBean) object).getJumpurl());
+                startActivity(intent);
+            }
         }
 //        ArrayList<String> arrayList = new ArrayList<>();
 //        arrayList.add("00119389676");
@@ -126,10 +134,10 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
 //            new UpdateManager(HomeActivity.this,1).showDialog("http://192.168.2.183:8081/file/downFile/c30a5444087e41459ba3eca1d901a2f0","1.本次apk升级 \n 2.修复若干bug ");
-//            return true;
-//        }else
+            return true;
+        }else
         if(keyCode ==KeyEvent.KEYCODE_0){
             //首页按键 开始系统升级 com.inpor.fmctv.activity.LoginActivity
             new UpdateManager(HomeActivity.this,2).showDialog("http://192.168.2.40:9000/systemimg.zip","1.本次系统升级 \n 2.修复若干bug ");
