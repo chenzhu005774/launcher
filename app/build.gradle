@@ -8,8 +8,8 @@ android {
         applicationId "com.amtzhmt.launcher"
         minSdkVersion 17
         targetSdkVersion 19
-        versionCode 18
-        versionName "18.0"
+        versionCode 22
+        versionName "22.0"
         multiDexEnabled true
     }
     buildTypes {
