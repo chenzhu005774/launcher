@@ -26,6 +26,8 @@ import com.amtzhmt.launcher.push.Message;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 打印log信息类
@@ -210,8 +212,8 @@ public class LogUtils {
         int screenWidth = wm.getDefaultDisplay().getWidth();
         int screenHeight = wm.getDefaultDisplay().getHeight();
 
-        para.height = (int)(screenHeight*0.8);//WRAP_CONTENT
-        para.width = (int)(screenWidth*0.7);//WRAP_CONTENT
+        para.height = (int)(screenHeight*0.4);//WRAP_CONTENT
+        para.width = (int)(screenWidth*0.5);//WRAP_CONTENT
         para.format = 1;
         para.flags = WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         para.gravity = Gravity.CENTER;
@@ -330,4 +332,38 @@ public class LogUtils {
         return versionCode;
 
     }
+
+
+    public static boolean compare(String local,String online) {
+        try {
+            //如果想比较日期则写成"yyyy-MM-dd"就可以了
+            local = getDate(local);
+            online =getDate(online);
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            //将字符串形式的时间转化为Date类型的时间
+            Date a=sdf.parse(local);
+            Date b=sdf.parse(online);
+            //Date类的一个方法，如果local 小于online返回true，否则返回false
+            if(a.before(b))
+                return true;
+            else
+                return false;
+        }catch (Exception e){
+            return false;
+        }
+
+    }
+
+    public static String getDate(String data){
+        String newdata = data.substring(0,4);
+        newdata = newdata+"-"+data.substring(4,6);
+        newdata = newdata+"-"+data.substring(6);
+
+        return newdata;
+    }
+
+    public static void main(String args[]) {
+        System.out.println("Hello World!"+compare("20200311","20200312"));
+    }
+
 }

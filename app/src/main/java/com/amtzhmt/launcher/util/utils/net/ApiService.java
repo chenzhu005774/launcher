@@ -36,5 +36,7 @@ public interface ApiService {
     //获取apk 升级信息
     @GET("apk/manage/findPage")
     Call<ResponseBody> getApkInfo( @Query("pageNumber")int pageNumber , @Query("pagesize")int pagesize);
-
+    //获取系统升级信息
+    @GET("apk/stbSystem/findPage")
+    Call<ResponseBody> getSysInfo( @Query("pageNumber")int pageNumber , @Query("pagesize")int pagesize);
 }

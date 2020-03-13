@@ -8,6 +8,7 @@ import com.amtzhmt.launcher.App;
 import com.amtzhmt.launcher.util.utils.LogUtils;
 import com.google.gson.Gson;
 
+import org.json.JSONObject;
 
 
 public class MyUdpClient extends UDPClientBase {
@@ -32,8 +33,15 @@ public class MyUdpClient extends UDPClientBase {
             //1xxxxxxxxxxxx \n 2xxxxxxxxxxxxxx 3xxxxxxxxxxxxx\n
 			String str = null;
 			str = message.getData();
-			LogUtils.i("AMTPush自定义推送信息:" + str+" bbbbbbbbbbbb "+App.context);
-			LogUtils.showWindowManagerDialog(App.context,str);
+			try {
+				JSONObject json = new JSONObject(str);
+				String msg = json.getString("message");
+				LogUtils.i("AMTPush自定义推送信息:" + msg+" bbbbbbbbbbbb "+App.context);
+				LogUtils.showWindowManagerDialog(App.context,msg);
+			}catch (Exception e){
+				LogUtils.i("AMTPush自定义推送信息Exception:"+ e);
+			}
+
 		}
 	}
 

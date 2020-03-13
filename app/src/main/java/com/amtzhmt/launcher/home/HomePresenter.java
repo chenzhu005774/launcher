@@ -34,7 +34,9 @@ import com.amtzhmt.launcher.util.utils.LogUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -381,6 +383,43 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
             }
         });
     }
+
+    @Override
+    public void getUpdateSysinfo(final String localversion) {
+        Api.getDefault().getSysInfo(1,100).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                String result = null;
+                JSONObject jSONObject = null;
+                try {
+                    result = response.body().string();
+                    jSONObject = new JSONObject(result);
+                    JSONArray data = jSONObject.getJSONObject("data").getJSONArray("pageRecords");
+                    if (data.length()!=0){
+                        JSONObject jsonObject = data.getJSONObject(0);
+                        String onlineVersion = jsonObject.getString("version");
+
+                         if (LogUtils.compare(localversion,onlineVersion)) {
+                             //  需要升级
+                             mView.needUpdateSys(jsonObject.getString("url"));
+                         }else {
+                             // 不需要升级
+                             mView.unneedUpdateSys("当前系统为最新系统");
+                         }
+                    }
+                } catch ( Exception e) {
+                    e.printStackTrace();
+                    mView.unneedUpdateSys("获取系统版本信息解析失败");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                mView.unneedUpdateSys("获取系统版本失败");
+            }
+        });
+    }
+
 
 
 }
