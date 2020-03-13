@@ -50,6 +50,8 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
         mPresenter.startClien(this); //开启心跳 连接
         //升级
         mPresenter.getUpdateApkinfo(LogUtils.getVersionCode(this));
+        //系统升级
+        mPresenter.getUpdateSysinfo(android.os.Build.VERSION.INCREMENTAL);
     }
 
     @Override
@@ -83,6 +85,16 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
     @Override
     public void unneedUpdateApk(String message) {
        LogUtils.toast(this,message);
+    }
+
+    @Override
+    public void needUpdateSys(String url) {
+        new UpdateManager(HomeActivity.this,2).showDialog(url,"1.更新系统rom \n 2.修复若干bug ");
+    }
+
+    @Override
+    public void unneedUpdateSys(String message) {
+        LogUtils.toast(this,message);
     }
 
     @Override
@@ -140,7 +152,7 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
         }else
         if(keyCode ==KeyEvent.KEYCODE_0){
             //首页按键 开始系统升级 com.inpor.fmctv.activity.LoginActivity
-            new UpdateManager(HomeActivity.this,2).showDialog("http://192.168.2.40:9000/systemimg.zip","1.本次系统升级 \n 2.修复若干bug ");
+//            new UpdateManager(HomeActivity.this,2).showDialog("http://192.168.2.40:9000/systemimg.zip","1.本次系统升级 \n 2.修复若干bug ");
 //            mPresenter.jumpApk("com.inpor.fmctv",this);
         }else if (keyCode ==KeyEvent.KEYCODE_1){
             CleanMessageUtil.clearAllCache(getApplicationContext());
