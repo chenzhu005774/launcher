@@ -89,7 +89,7 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
 
     @Override
     public void needUpdateSys(String url) {
-        new UpdateManager(HomeActivity.this,2).showDialog(url,"1.更新系统rom \n 2.修复若干bug ");
+        new UpdateManager(HomeActivity.this,2).showDialog(Constant.UPDATESYSHTTP+url,"1.更新系统rom \n 2.修复若干bug ");
     }
 
     @Override

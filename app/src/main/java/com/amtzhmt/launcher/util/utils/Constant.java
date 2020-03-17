@@ -11,6 +11,7 @@ public class Constant {
     public static String BASEURL= "http://app.androidmov.com:31010/industry-iptv-api/";
     public static String pichttp="http://app.androidmov.com:31010";
     public static String UPDATEHTTP="http://app.androidmov.com:31010/file/";
+    public static String UPDATESYSHTTP="http://app.androidmov.com:31010";
     public static String VIDEOEHTTP="http://app.androidmov.com:31010";
     //栏目 epg二级页面
     public static String CATALOGEPGURL="http://app.androidmov.com:31010/epg/list.html?";

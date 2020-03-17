@@ -16,6 +16,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
+        android:scrollbars="vertical"
         android:id="@+id/content"
         android:layout_marginRight="50px"
         android:layout_marginLeft="50px"

@@ -38,7 +38,8 @@
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".catalog.CatalogActivity" />
         <activity android:name=".vodplay.VodplayActivity" />
-        <activity android:name=".webview.WebviewActivity" />
+        <activity android:name=".webview.WebviewActivity"
+                  android:hardwareAccelerated="true"/>
         <service android:name="com.amtzhmt.launcher.push.clientService"/>
     </application>
 

@@ -149,8 +149,9 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             progress += 10;
             if (progress > 90) {
                 progress = 10;
-//                startAPP("com.android.smart.terminal.settings");
-                startAPP("com.android.settings");
+//                一个是原生 一个是我们的apk
+                startAPP("com.android.smart.terminal.settings");
+//                startAPP("com.android.settings");
                 handler.removeCallbacks(changePross);
                 handler.removeCallbacks(runnable);
                 return;

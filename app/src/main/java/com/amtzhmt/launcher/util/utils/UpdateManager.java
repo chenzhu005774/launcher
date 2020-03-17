@@ -154,6 +154,7 @@ private static final String saveFileName ="launcher.apk";
     *升级对话框
     **/
    public  void showDialog(final String downApkUrl,String message) {
+      LogUtils.d("down load url:"+downApkUrl);
       AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
       builder.setTitle("新版本升级").
             setIcon(R.mipmap.update). // 设置提示框的图标

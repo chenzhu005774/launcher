@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -166,9 +167,13 @@ public class LogUtils {
             Toast.makeText(context, "[" + TAG_APP + "]" +paramString, Toast.LENGTH_LONG).show();
         }
     }
-
+/**
+ *操作提示框
+ *有操作回调的
+ *不应该受限制与isLogEnable
+ ***/
     public static void showDialog(Context context,String paramString ,final DialogCallback dialogCallback) {
-        if (isLogEnabled) {
+//        if (isLogEnabled) {
             AlertDialog.Builder builder  = new AlertDialog.Builder(context);
             builder.setTitle("提示" ) ;
             builder.setMessage(paramString ) ;
@@ -176,6 +181,20 @@ public class LogUtils {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogCallback.clickSure();
+                }
+            });
+            builder.show();
+//        }
+    }
+
+    public static void showDialog(Context context,String paramString  ) {
+        if (isLogEnabled) {
+            AlertDialog.Builder builder  = new AlertDialog.Builder(context);
+            builder.setTitle("提示" ) ;
+            builder.setMessage(paramString ) ;
+            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
                 }
             });
             builder.show();
@@ -191,19 +210,7 @@ public class LogUtils {
             Log.d("[" + TAG_APP + "]", paramString);
         }
     }
-    public static void showDialog(Context context,String paramString  ) {
-        if (isLogEnabled) {
-            AlertDialog.Builder builder  = new AlertDialog.Builder(context);
-            builder.setTitle("提示" ) ;
-            builder.setMessage(paramString ) ;
-            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                }
-            });
-            builder.show();
-        }
-    }
+
 
     public static void showWindowManagerDialog(Context context,String content){
         final WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -221,6 +228,7 @@ public class LogUtils {
         final View contentView = LayoutInflater.from(context).inflate(R.layout.system_dialog_view, null);
         Button tvDlgBtn = (Button) contentView.findViewById(R.id.dialog_sure);
         TextView contenttext = (TextView)contentView.findViewById(R.id.content);
+        contenttext.setMovementMethod(ScrollingMovementMethod.getInstance());
         contenttext.setText(content);
         tvDlgBtn.setOnClickListener(new View.OnClickListener() {
             @Override

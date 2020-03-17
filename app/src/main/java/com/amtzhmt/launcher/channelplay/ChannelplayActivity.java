@@ -51,24 +51,30 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
     }
 
     @Override
-    public void getChannelSuccess(String result, List<ChannelEntity> list) {
-        Intent intent = getIntent();
-        String data=intent.getStringExtra("url");
-        LogUtils.i("put here url"+data );
-        totalNum = list.size();
-        if (totalNum!=0) {
-            for (int a = 0; a < list.size(); a++) {
-                if (list.get(a).getUrl().equals(data)) {
-                    channelIndex = a;
+    public void getChannelSuccess(String result, final List<ChannelEntity> list) {
+        channelplay.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = getIntent();
+                String data=intent.getStringExtra("url");
+                LogUtils.i("put here url"+data );
+                totalNum = list.size();
+                if (totalNum!=0) {
+                    for (int a = 0; a < list.size(); a++) {
+                        if (list.get(a).getUrl().equals(data)) {
+                            channelIndex = a;
+                        }
+                    }
+                    channelEntities = list;
+                    channelplay.setVideoURI(Uri.parse(channelEntities.get(channelIndex).getUrl()));
+                }else {
+                    channelplay.setVideoURI(Uri.parse(data));
                 }
+                channelNumtxt.setText(channelIndex+1+"");
+                mPresenter.timeSend(channelNumtxt);
             }
-            channelEntities = list;
-            channelplay.setVideoURI(Uri.parse(channelEntities.get(channelIndex).getUrl()));
-        }else {
-            channelplay.setVideoURI(Uri.parse(data));
-        }
-        channelNumtxt.setText(channelIndex+1+"");
-        mPresenter.timeSend(channelNumtxt);
+        },1000);
+
     }
 
     @Override

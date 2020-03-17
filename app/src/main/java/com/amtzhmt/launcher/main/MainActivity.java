@@ -73,7 +73,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public void getTokenFail(String result) {
         LogUtils.toast(this,result);
-        LogUtils.showDialog(this,"获取token失败,点击重试",this);
+        LogUtils.showDialog(this,"获取token失败,请检查网络连接并重试！",this);
 
     }
 

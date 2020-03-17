@@ -2,10 +2,12 @@ package com.amtzhmt.launcher.webview;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -88,9 +90,13 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
      * @param url
      */
     private void addWeb(String url) {  // 重点在这里，每次都新的URL都会创建一个WebView实例，添加到容器中
-        WebView mWeb = new WebView(this);
-        mWeb.setBackgroundColor(Color.parseColor("#262d47"));
-        mWeb.setBackgroundResource(R.mipmap.bg);
+        final WebView mWeb = new WebView(this);
+        mWeb.setVisibility(View.INVISIBLE);
+
+
+
+        mWeb.setLayerType(View.LAYER_TYPE_HARDWARE,null);//开启硬件加速
+        mWeb.setBackgroundColor(Color.parseColor("#23345B"));
         WebSettings webSettings = mWeb.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
@@ -98,6 +104,16 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
         mWeb.setFocusable(true);
         mWeb.setWebChromeClient(new WebChromeClient());
         mWeb.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                mWeb.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+            }
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (!urlList.contains(url)) {
@@ -119,6 +135,8 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
                 ViewGroup.LayoutParams.MATCH_PARENT
         );
         mWeb.setLayoutParams(params);
+
+
     }
     // 返回处理时移除容器的最顶的视图（即当前页面视图）
     @Override
