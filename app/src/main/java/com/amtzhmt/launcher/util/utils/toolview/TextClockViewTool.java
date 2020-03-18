@@ -48,9 +48,9 @@ public class TextClockViewTool {
             format = format.replace("YYYY","yyyy");
 //            format = format.replace("MM","mm");
             format = format.replace("DD","dd");
-            textClock.setFormat12Hour(format);
+            textClock.setFormat24Hour(format);
         }else {
-            textClock.setFormat12Hour(format);
+            textClock.setFormat24Hour(format);
         }
             textClock.setTextSize(textClockViewToolBean.getTextsize());
         textClock.setGravity(Gravity.RIGHT);

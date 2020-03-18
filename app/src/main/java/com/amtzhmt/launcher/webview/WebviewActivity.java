@@ -92,22 +92,20 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
     private void addWeb(String url) {  // 重点在这里，每次都新的URL都会创建一个WebView实例，添加到容器中
         final WebView mWeb = new WebView(this);
         mWeb.setVisibility(View.INVISIBLE);
-
-
-
-        mWeb.setLayerType(View.LAYER_TYPE_HARDWARE,null);//开启硬件加速
+//        mWeb.setLayerType(View.LAYER_TYPE_HARDWARE,null);//开启硬件加速
         mWeb.setBackgroundColor(Color.parseColor("#23345B"));
         WebSettings webSettings = mWeb.getSettings();
+        webSettings.setLoadsImagesAutomatically(true);
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
-        mWeb.requestFocus();
-        mWeb.setFocusable(true);
         mWeb.setWebChromeClient(new WebChromeClient());
         mWeb.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 mWeb.setVisibility(View.VISIBLE);
+                mWeb.requestFocus();
+                mWeb.setFocusable(true);
             }
 
             @Override
