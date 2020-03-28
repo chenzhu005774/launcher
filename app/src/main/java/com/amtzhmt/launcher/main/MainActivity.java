@@ -51,6 +51,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.leaveScreen(icon);
+        if (mPresenter!=null) {
+            mPresenter.detachView();
+        }
     }
 
     @Override

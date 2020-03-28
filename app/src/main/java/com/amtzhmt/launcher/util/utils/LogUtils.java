@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.amtzhmt.launcher.App;
 import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.push.Message;
+import com.amtzhmt.launcher.util.utils.customizeview.CommonDialog;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class LogUtils {
     /**
      * 是否允许显示log
      */
-    public static final boolean isLogEnabled = true;
+    public static final boolean isLogEnabled = false;
     private static final String TAG_APP = "chenzhu";
     private static Thread thread;
     /**
@@ -174,17 +175,19 @@ public class LogUtils {
  ***/
     public static void showDialog(Context context,String paramString ,final DialogCallback dialogCallback) {
 //        if (isLogEnabled) {
-            AlertDialog.Builder builder  = new AlertDialog.Builder(context);
-            builder.setTitle("提示" ) ;
-            builder.setMessage(paramString ) ;
-            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogCallback.clickSure();
-                }
-            });
-            builder.show();
+//            AlertDialog.Builder builder  = new AlertDialog.Builder(context);
+//            builder.setTitle("提示" ) ;
+//            builder.setMessage(paramString ) ;
+//            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//                    dialogCallback.clickSure();
+//                }
+//            });
+//            builder.show();
 //        }
+
+        showWindowManagerDialogMessage(context,paramString,dialogCallback);
     }
 
     public static void showDialog(Context context,String paramString  ) {
@@ -211,6 +214,27 @@ public class LogUtils {
         }
     }
 
+    public static void showWindowManagerDialogMessage(final Context context, String content, final DialogCallback dialogCallback){
+
+        final CommonDialog dialog = new CommonDialog(context);
+        dialog.setMessage("这是一个自定义Dialog。")
+//                .setImageResId(R.mipmap.ic_launcher)
+                .setTitle("系统提示")
+                .setMessage(content)
+                .setSingle(true).setOnClickBottomListener(new CommonDialog.OnClickBottomListener() {
+            @Override
+            public void onPositiveClick() {
+                dialog.dismiss();
+                dialogCallback.clickSure();
+            }
+
+            @Override
+            public void onNegtiveClick() {
+                dialog.dismiss();
+                dialogCallback.clickSure();
+            }
+        }).show();
+    }
 
     public static void showWindowManagerDialog(Context context,String content){
         final WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -372,6 +396,8 @@ public class LogUtils {
 
     public static void main(String args[]) {
         System.out.println("Hello World!"+compare("20200311","20200312"));
+
+
     }
 
 }

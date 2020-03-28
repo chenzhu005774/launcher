@@ -1,6 +1,8 @@
 package com.amtzhmt.launcher.webview;
 
 import android.content.Context;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -43,5 +45,20 @@ public class WebviewPresenter extends BasePresenterImpl<WebviewContract.View> im
         });
 
 
+    }
+
+    @Override
+    public void destoryWebView(WebView webView) {
+        if (webView != null) {
+            ViewParent parent = webView.getParent();
+            if (parent != null) {
+                ((ViewGroup) parent).removeView(webView);
+            }
+            webView.stopLoading();
+            webView.getSettings().setJavaScriptEnabled(false);
+            webView.clearHistory();
+            webView.removeAllViews();
+            webView.destroy();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.amtzhmt.launcher.util.utils.toolview;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -46,13 +47,22 @@ public class TextClockViewTool {
             format = textClockViewToolBean.getFormattype();
         if (format.contains("yyyy")||format.contains("YYYY")) {
             format = format.replace("YYYY","yyyy");
-//            format = format.replace("MM","mm");
             format = format.replace("DD","dd");
-            textClock.setFormat24Hour(format);
+            if (textClock.is24HourModeEnabled()) {
+                textClock.setFormat24Hour(format);
+            }else {
+                textClock.setFormat12Hour(format);
+            }
+            Log.i("chenzhu","set fomat: "+format);
         }else {
-            textClock.setFormat24Hour(format);
+            if (textClock.is24HourModeEnabled()) {
+                textClock.setFormat24Hour(format);
+            }else {
+                textClock.setFormat12Hour(format);
+            }
+            Log.i("chenzhu","set fomat: "+format);
         }
-            textClock.setTextSize(textClockViewToolBean.getTextsize());
+        textClock.setTextSize(textClockViewToolBean.getTextsize());
         textClock.setGravity(Gravity.RIGHT);
         textClock.setTextSize(textClockViewToolBean.getTextsize());
         textClock.setTextColor(commonBean.getContext().getResources().getColor(R.color.whithe));

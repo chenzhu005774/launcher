@@ -156,6 +156,10 @@ public class VodplayActivity extends MVPBaseActivity<VodplayContract.View, Vodpl
         mPresenter.timeremoveall();
         finish();
         System.gc();
+        if (mPresenter!=null) {
+            mPresenter.detachView();
+        }
+        LogUtils.d("WebviewActivity--onDestroy");
     }
 
     @Override

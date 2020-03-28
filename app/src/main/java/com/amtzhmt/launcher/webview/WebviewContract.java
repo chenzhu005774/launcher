@@ -17,5 +17,7 @@ public class WebviewContract {
 
     interface  Presenter extends BasePresenter<View> {
        void initwebview(WebView webView);
+
+        void destoryWebView(WebView webView);
     }
 }

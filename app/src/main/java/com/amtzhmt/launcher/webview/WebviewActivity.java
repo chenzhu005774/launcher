@@ -34,9 +34,10 @@ import java.util.List;
  */
 
 public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, WebviewPresenter> implements WebviewContract.View {
-   String jumpurl;
+    String jumpurl;
     private FrameLayout contentContainer; // 容器
     private List<String> urlList = new ArrayList<>(); // 记录访问的URL
+    private List<WebView> webViews = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,8 +83,6 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
 
     }
 
-
-
     /**
      * 添加webview
      *
@@ -92,6 +91,7 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
     private void addWeb(String url) {  // 重点在这里，每次都新的URL都会创建一个WebView实例，添加到容器中
         final WebView mWeb = new WebView(this);
         mWeb.setVisibility(View.INVISIBLE);
+
 //        mWeb.setLayerType(View.LAYER_TYPE_HARDWARE,null);//开启硬件加速
         mWeb.setBackgroundColor(Color.parseColor("#23345B"));
         WebSettings webSettings = mWeb.getSettings();
@@ -127,6 +127,7 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
         //添加js接口，指明供js调用的对象和名称
         mWeb.addJavascriptInterface(this, "MediaPlayer");
         mWeb.loadUrl(url);
+        webViews.add(mWeb);
         contentContainer.addView(mWeb);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -165,4 +166,18 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
         startActivity(intent);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        for (WebView webView:webViews) {
+            mPresenter.destoryWebView(webView);
+            LogUtils.d("--onDestroy webViews");
+        }
+        contentContainer.removeAllViews();
+        if (mPresenter!=null) {
+            mPresenter.detachView();
+        }
+        LogUtils.d("WebviewActivity--onDestroy");
+
+    }
 }

@@ -120,6 +120,10 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
         channelplay.stopPlayback();
         finish();
         System.gc();
+        if (mPresenter!=null) {
+            mPresenter.detachView();
+        }
+        LogUtils.d("ChannelplayActivity--onDestroy");
     }
 
     @Override

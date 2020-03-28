@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="600px"
+    android:layout_height="300px"
     android:orientation="vertical"
-    android:background="@mipmap/bg"
+    android:background="@mipmap/msgbg"
     android:id="@+id/catalogroot">
 
     <TextView
-        android:textSize="35sp"
-        android:textColor="#FFFFFF"
+        android:layout_marginTop="55dp"
+        android:textSize="30px"
         android:layout_centerHorizontal="true"
-        android:text="系统消息通知"
+        android:text="提示"
+        android:textColor="#FFFFFF"
         android:id="@+id/dialog_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -20,25 +21,25 @@
         android:textColor="#FFFFFF"
         android:scrollbars="vertical"
         android:id="@+id/content"
-        android:layout_marginRight="50px"
-        android:layout_marginLeft="50px"
-        android:layout_marginTop="20dp"
-        android:textSize="25sp"
-        android:layout_below="@+id/dialog_text"
-        android:layout_above="@+id/dialog_sure"
-        android:text=""
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_marginLeft="156px"
+        android:layout_marginTop="117px"
+        android:textSize="24px"
+        android:text="无法连接到网络，请重试！"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <Button
         android:text="确认"
         android:textColor="#FFFFFF"
         android:textSize="30sp"
+        android:layout_marginTop="184px"
+        android:layout_marginLeft="209px"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:id="@+id/dialog_sure"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:id="@+id/dialog_msgsure"
+        android:background="@mipmap/surebg"
+        android:layout_width="182px"
+        android:layout_height="78px" />
 
 
 
