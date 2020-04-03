@@ -1,12 +1,10 @@
 package com.amtzhmt.launcher.util.utils.toolview;
-
-import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
-
 import com.amtzhmt.launcher.R;
+import com.amtzhmt.launcher.util.utils.LogUtils;
 import com.amtzhmt.launcher.util.utils.commonbean.CommonBean;
 import com.amtzhmt.launcher.util.utils.Constant;
 
@@ -53,14 +51,14 @@ public class TextClockViewTool {
             }else {
                 textClock.setFormat12Hour(format);
             }
-            Log.i("chenzhu","set fomat: "+format);
+            LogUtils.i("chenzhu","set fomat: "+format);
         }else {
             if (textClock.is24HourModeEnabled()) {
                 textClock.setFormat24Hour(format);
             }else {
                 textClock.setFormat12Hour(format);
             }
-            Log.i("chenzhu","set fomat: "+format);
+            LogUtils.i("chenzhu","set fomat: "+format);
         }
         textClock.setTextSize(textClockViewToolBean.getTextsize());
         textClock.setGravity(Gravity.RIGHT);

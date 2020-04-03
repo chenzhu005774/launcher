@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.amtzhmt.launcher.App;
 import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.push.Message;
+import com.amtzhmt.launcher.util.utils.broadcast.NetWorkChangReceiver;
 import com.amtzhmt.launcher.util.utils.customizeview.CommonDialog;
 
 import java.io.BufferedReader;
@@ -39,7 +40,7 @@ public class LogUtils {
     /**
      * 是否允许显示log
      */
-    public static final boolean isLogEnabled = false;
+    public static final boolean isLogEnabled = true;
     private static final String TAG_APP = "chenzhu";
     private static Thread thread;
     /**
@@ -225,12 +226,14 @@ public class LogUtils {
             @Override
             public void onPositiveClick() {
                 dialog.dismiss();
+                if (dialogCallback!=null)
                 dialogCallback.clickSure();
             }
 
             @Override
             public void onNegtiveClick() {
                 dialog.dismiss();
+                if (dialogCallback!=null)
                 dialogCallback.clickSure();
             }
         }).show();
@@ -269,6 +272,40 @@ public class LogUtils {
             }.start();
     }
 
+    public static void showWindowManagerDialog1(Context context,String content ){
+        final WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        final  WindowManager.LayoutParams para = new WindowManager.LayoutParams();
+
+        int screenWidth = wm.getDefaultDisplay().getWidth();
+        int screenHeight = wm.getDefaultDisplay().getHeight();
+
+        para.height = (int)(screenHeight*0.4);//WRAP_CONTENT
+        para.width = (int)(screenWidth*0.48);//WRAP_CONTENT
+        para.format = 1;
+        para.flags = WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        para.gravity = Gravity.CENTER;
+        para.type = WindowManager.LayoutParams.TYPE_TOAST;
+        final View contentView = LayoutInflater.from(context).inflate(R.layout.system_dialog_view1, null);
+        Button tvDlgBtn = (Button) contentView.findViewById(R.id.dialog_sure);
+        TextView contenttext = (TextView)contentView.findViewById(R.id.content);
+//        contenttext.setMovementMethod(ScrollingMovementMethod.getInstance());
+        contenttext.setText(content);
+        tvDlgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wm.removeView(contentView);
+            }
+        });
+            new Thread() {
+                public void run() {
+
+                    Looper.prepare();
+                    wm.addView(contentView, para);
+                    Looper.loop();
+                }
+            }.start();
+
+    }
     public static Activity findActivity(Context context) {
         if (context instanceof Activity) {
             return (Activity) context;

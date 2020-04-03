@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.amtzhmt.launcher.R;
+import com.amtzhmt.launcher.util.utils.customizeview.CommonDialog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,7 +26,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.GeneralSecurityException;
 
 /**
  *更新工具类
@@ -70,10 +70,11 @@ private static final String saveFileName ="launcher.apk";
    private static final int APK_DOWN_OVER = 2;
    private static final int SYS_DOWN_OVER = 3;
    private  Context mContext;
-   private Dialog downloadDialog;
+//   private Dialog downloadDialog;
+    CommonDialog dialog ;
    private TextView tvProgress;
    private int updatetype=1;
-   AlertDialog.Builder builder;
+//   AlertDialog.Builder builder;
    public UpdateManager(Context mContext,int updatetype ) {
       this.mContext = mContext;
       this.updatetype =updatetype;
@@ -86,14 +87,14 @@ private static final String saveFileName ="launcher.apk";
          switch (msg.what)
          {
             case DOWN_UPDATE:
-               mProgress.setProgress(progress);
-               tvProgress.setText(progress+"%");
+               dialog.setProgress(progress);
+              
                break;
             case APK_DOWN_OVER:
                installApk();
                break;
             case SYS_DOWN_OVER:
-               builder.setMessage("正在验证系统软件包");
+               dialog.setInfoMessage("正在验证系统软件包",dialog);
                verifyPackageRom();
                break;
          }
@@ -123,12 +124,12 @@ private static final String saveFileName ="launcher.apk";
          }catch (Exception e){
             LogUtils.i("system install Exception:"+e);
             e.printStackTrace();
-            builder.setMessage("系统验证安装失败");
+            dialog.setInfoMessage("系统验证安装失败",dialog);
          }
       } catch (Exception e) {
          LogUtils.i("verifyPackage　or install Exception:"+e);
          e.printStackTrace();
-         builder.setMessage("系统验证不通过");
+         dialog.setInfoMessage("系统验证不通过",dialog);
       }
    }
 
@@ -147,50 +148,87 @@ private static final String saveFileName ="launcher.apk";
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       intent.setDataAndType(Uri.fromFile(apkfile), "application/vnd.android.package-archive");
       mContext.startActivity(intent);
-      downloadDialog.dismiss();
+      dialog.dismiss();
 
    }
+
    /**
     *升级对话框
     **/
    public  void showDialog(final String downApkUrl,String message) {
       LogUtils.d("down load url:"+downApkUrl);
-      AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-      builder.setTitle("新版本升级").
-            setIcon(R.mipmap.update). // 设置提示框的图标
-            setMessage("新版本主要包含以下更新:\n"+message).// 设置要显示的信息
-            setPositiveButton("确定", new DialogInterface.OnClickListener() {// 设置确定按钮
+
+      final CommonDialog dialog = new CommonDialog(mContext);
+      dialog.setMessage("这是一个自定义Dialog。")
+//              .setImageResId(R.mipmap.update) // 设置提示框的图标
+              .setTitle("新版本升级")
+              .setMessage(message)
+              .setSingle(true).setOnClickBottomListener(new CommonDialog.OnClickBottomListener() {
          @Override
-         public void onClick(DialogInterface dialog, int which) {
+         public void onPositiveClick() {
+            dialog.dismiss();
             startUpload(downApkUrl);//下载最新的版本程序
          }
-      }).setNegativeButton("取消", null);//设置取消按钮,null是什么都不做，并关闭对话框
-      AlertDialog alertDialog = builder.create();
-      // 显示对话框
-      alertDialog.show();
+
+         @Override
+         public void onNegtiveClick() {
+            dialog.dismiss();
+            startUpload(downApkUrl);//下载最新的版本程序
+         }
+      }).show();
+
+
    }
 
   /**
    *开始下载文件
    **/
    private  void  startUpload(String downApkUrl){
-      builder = new AlertDialog.Builder(mContext);
-      builder.setTitle("文件下载").
-      setIcon(R.mipmap.update).
-      setMessage("文件正在下载,请勿断电!!!");
+//      builder = new AlertDialog.Builder(mContext);
+//      builder.setTitle("文件下载").
+//      setIcon(R.mipmap.update).
+//      setMessage("文件正在下载,请勿断电!!!");
+//      final LayoutInflater inflater = LayoutInflater.from(mContext);
+//      View v = inflater.inflate(R.layout.progress, null);
+//      mProgress = (ProgressBar) v.findViewById(R.id.progress);
+//      tvProgress = (TextView) v.findViewById(R.id.tv_progress);
+//      builder.setView(v);
+//      downloadDialog = builder.create();
+//      downloadDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+//         @Override
+//         public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+//            return true;
+//         }
+//      });
+//      downloadDialog.show();
+//      loadApkUrl = downApkUrl;
+//      DownApkorSysrom();
+/**----------------------------------------------------------------------------------------------**/
+      dialog = new CommonDialog(mContext,2);
       final LayoutInflater inflater = LayoutInflater.from(mContext);
-      View v = inflater.inflate(R.layout.progress, null);
-      mProgress = (ProgressBar) v.findViewById(R.id.progress);
-      tvProgress = (TextView) v.findViewById(R.id.tv_progress);
-      builder.setView(v);
-      downloadDialog = builder.create();
-      downloadDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+      View v = inflater.inflate(R.layout.progress_dialog_layout, null);
+      mProgress = (ProgressBar) v.findViewById(R.id.progress_pp);
+      tvProgress = (TextView) v.findViewById(R.id.tv_progress_pp);
+      dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
          @Override
          public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
             return true;
          }
       });
-      downloadDialog.show();
+       dialog.setTitle("新版本升级")
+              .setMessage("文件正在下载,请勿断电!!!")
+              .setSingle(true).setOnClickBottomListener(new CommonDialog.OnClickBottomListener() {
+         @Override
+         public void onPositiveClick() {
+
+         }
+
+         @Override
+         public void onNegtiveClick() {
+
+         }
+      }).show();
+      dialog.show();
       loadApkUrl = downApkUrl;
       DownApkorSysrom();
    }
@@ -250,11 +288,11 @@ private static final String saveFileName ="launcher.apk";
                } while (!interceptFlag);// 点击取消就停止下载.
             } catch (MalformedURLException e) {
                LogUtils.i("down load MalformedURLException:"+e.toString());
-               builder.setMessage("文件下载异常....");
+               dialog.setInfoMessage("文件下载异常....",dialog);
                e.printStackTrace();
             } catch (IOException e) {
                LogUtils.i("down load IOException TTTT:"+e.toString());
-               builder.setMessage("文件下载异常....");
+               dialog.setInfoMessage("文件下载异常....",dialog);
                e.printStackTrace();
             }
          }

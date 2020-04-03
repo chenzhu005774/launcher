@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.util.utils.Constant;
 import com.amtzhmt.launcher.util.utils.LogUtils;
+import com.amtzhmt.launcher.util.utils.RoundAngleImageView;
 import com.amtzhmt.launcher.util.utils.annima.RotationAnimation;
 import com.amtzhmt.launcher.util.utils.commonbean.CommonBean;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -43,7 +44,7 @@ final public class ImageViewTool  {
 
         RelativeLayout.LayoutParams imgparams =  new RelativeLayout.LayoutParams(imageViewToolBean.getWidth(),imageViewToolBean.getHeigh());
         imgparams.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE);
-        final ImageView imageView = new ImageView(commonBean.getContext());
+        final RoundAngleImageView imageView = new RoundAngleImageView(commonBean.getContext());
         imageView.setImageResource(R.mipmap.b1);
         imageView.setTag(commonBean.getTag());
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);

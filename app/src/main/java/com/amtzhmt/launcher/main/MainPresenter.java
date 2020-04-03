@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.amtzhmt.launcher.home.HomeActivity;
 import com.amtzhmt.launcher.login.LoginActivity;
 import com.amtzhmt.launcher.mvp.BasePresenterImpl;
+import com.amtzhmt.launcher.util.utils.DialogCallback;
 import com.amtzhmt.launcher.util.utils.LogUtils;
 import com.amtzhmt.launcher.util.utils.annima.Rotate3dAnimation;
 import com.amtzhmt.launcher.util.utils.bean.CustomerEntity;
@@ -33,7 +34,7 @@ import static com.amtzhmt.launcher.util.utils.CheckNet.getNetMode;
  *  邮箱 784787081@qq.com
  */
 
-public class MainPresenter extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter{
+public class MainPresenter extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter,DialogCallback {
     SeekBar seek;
     int progress = 10;
     Handler handler=new Handler();
@@ -135,9 +136,11 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                     }
                 });
 
-
             } else {
+
                 handler.postDelayed(changePross, 1000);
+                LogUtils.showDialog(mView.getContext(),"当前网络连接异常是否跳转网络设置",MainPresenter.this);
+
             }
         }
     };
@@ -150,7 +153,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             if (progress > 90) {
                 progress = 10;
 //                一个是原生 一个是我们的apk
-                startAPP("com.android.smart.terminal.settings");
+//                startAPP("com.android.smart.terminal.settings");
 //                startAPP("com.android.settings");
                 handler.removeCallbacks(changePross);
                 handler.removeCallbacks(runnable);
@@ -193,5 +196,13 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         }catch(Exception e){
             Toast.makeText(mView.getContext(), "没有安装", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void clickSure() {
+//        无网络提示按确认
+        //                在这里提示一下 要去设置
+        startAPP("com.android.smart.terminal.settings");
+
     }
 }

@@ -17,6 +17,7 @@
 
 
 
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -41,6 +42,15 @@
         <activity android:name=".webview.WebviewActivity" />
         <!--android:hardwareAccelerated="true"-->
         <service android:name="com.amtzhmt.launcher.push.clientService"/>
+        <!--监听网络状态-->
+        <receiver android:name=".util.utils.broadcast.NetWorkChangReceiver" >
+            <!--<intent-filter>-->
+                <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
+                <!--<action android:name="android.net.wifi.WIFI_STATE_CHANGED" />-->
+                <!--<action android:name="android.net.wifi.STATE_CHANGE" />-->
+                <!--<action android:name="android.net.ethernet.ETHERNET_STATE_CHANGE" />-->
+            <!--</intent-filter>-->
+        </receiver>
     </application>
 
 </manifest>

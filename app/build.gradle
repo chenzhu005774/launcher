@@ -8,8 +8,8 @@ android {
         applicationId "com.amtzhmt.launcher"
         minSdkVersion 17
         targetSdkVersion 19
-        versionCode 34
-        versionName "34.0"
+        versionCode 37
+        versionName "37.0"
         multiDexEnabled true
     }
     buildTypes {
@@ -18,6 +18,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    //   自动追加版本号和版本名称
+    android.applicationVariants.all {
+        variant->variant.outputs.each {
+            output-> output.outputFile = new File(output.outputFile.parent,"launcher363_v"+defaultConfig.versionName+"_"+new Date().format("yyyy-MM-dd")+"_"+buildType.name+".apk")
+        }
+    }
+
+
 //    解决jar里面文件冲突的
     packagingOptions {
         exclude 'META-INF/maven/com.amt/JTR111/pom.xml'

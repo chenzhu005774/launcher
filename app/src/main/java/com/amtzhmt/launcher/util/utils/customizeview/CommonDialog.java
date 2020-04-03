@@ -2,11 +2,15 @@ package com.amtzhmt.launcher.util.utils.customizeview;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.amtzhmt.launcher.R;
@@ -17,6 +21,12 @@ import com.amtzhmt.launcher.R;
 */
 
 public class CommonDialog extends Dialog {
+
+    private TextView tvProgress;
+
+    private ProgressBar mProgress;
+
+    LinearLayout but_parent;
 /**
  * 显示的图片
  */
@@ -37,6 +47,7 @@ private TextView messageTv ;
  */
 private Button negtiveBn ,positiveBn;
 
+    private int type =1;//默认的
 /**
  * 按钮之间的分割线
  */
@@ -45,7 +56,12 @@ public CommonDialog(Context context) {
     super(context, R.style.CustomDialog);
 }
 
-/**
+ public CommonDialog(Context context,int type) {
+        super(context, R.style.CustomDialog);
+        this.type = type;
+    }
+
+    /**
  * 都是内容数据
  */
 private String message;
@@ -61,7 +77,11 @@ private boolean isSingle = false;
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.common_dialog_layout);
+    if (type==2){
+        setContentView(R.layout.progress_dialog_layout);
+    }else {
+        setContentView(R.layout.common_dialog_layout);
+    }
     //按空白处不能取消动画
     setCanceledOnTouchOutside(false);
     //初始化界面控件
@@ -156,8 +176,41 @@ private void initView() {
     messageTv = (TextView) findViewById(R.id.message);
     imageIv = (ImageView) findViewById(R.id.image);
     columnLineView = findViewById(R.id.column_line);
+    if (type==2){
+        mProgress = (ProgressBar) findViewById(R.id.progress_pp);
+        tvProgress = (TextView) findViewById(R.id.tv_progress_pp);
+        but_parent = (LinearLayout)findViewById(R.id.but_parent);
+    }
 }
 
+  public void setProgress(int progress){
+      if (mProgress!=null)
+      mProgress .setProgress(progress);
+      tvProgress.setText(progress+"%");
+  }
+    public void setInfoMessage(String message,CommonDialog dialog) {
+        but_parent.setVisibility(View.VISIBLE);
+        messageTv.setText(message);
+        mProgress.setVisibility(View.GONE);
+        tvProgress.setVisibility(View.GONE);
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                return false;
+            }
+        });
+        dialog.setOnClickBottomListener(new OnClickBottomListener() {
+            @Override
+            public void onPositiveClick() {
+                dismiss();
+            }
+
+            @Override
+            public void onNegtiveClick() {
+                dismiss();
+            }
+        });
+    }
 /**
  * 设置确定取消按钮的回调
  */
@@ -182,9 +235,11 @@ public String getMessage() {
 }
 
 public CommonDialog setMessage(String message) {
+
     this.message = message;
     return this ;
 }
+
 
 public String getTitle() {
     return title;

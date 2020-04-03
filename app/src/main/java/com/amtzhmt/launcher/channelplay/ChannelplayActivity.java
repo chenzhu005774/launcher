@@ -21,6 +21,8 @@ import com.amtzhmt.launcher.util.utils.bean.ChannelEntity;
 import com.amtzhmt.launcher.util.utils.customizeview.MyVideoView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -52,6 +54,25 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
 
     @Override
     public void getChannelSuccess(String result, final List<ChannelEntity> list) {
+
+       LogUtils.i("排序前：" + list);
+        Collections.sort(list, new Comparator<ChannelEntity>() {
+
+            @Override
+            public int compare(ChannelEntity o1, ChannelEntity o2) {
+                // 按照学生的年龄进行升序排列
+                if (Integer.valueOf(o1.getNum()) > Integer.valueOf(o2.getNum())) {
+                    return 1;
+                }
+                if (Integer.valueOf(o1.getNum()) == Integer.valueOf(o2.getNum())) {
+                    return 0;
+                }
+                return -1;
+            }
+        });
+
+        LogUtils.i("升序排序后：" + list);
+        // 延迟1s避免出现小窗口黑屏
         channelplay.postDelayed(new Runnable() {
             @Override
             public void run() {
