@@ -37,10 +37,11 @@ import java.util.Date;
  * @author
  */
 public class LogUtils {
+
     /**
      * 是否允许显示log
      */
-    public static final boolean isLogEnabled = true;
+    public static final boolean isLogEnabled = false;
     private static final String TAG_APP = "chenzhu";
     private static Thread thread;
     /**
@@ -239,6 +240,7 @@ public class LogUtils {
         }).show();
     }
 
+
     public static void showWindowManagerDialog(Context context,String content){
         final WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         final  WindowManager.LayoutParams para = new WindowManager.LayoutParams();
@@ -270,10 +272,12 @@ public class LogUtils {
                     Looper.loop();
                 }
             }.start();
+        tvDlgBtn.requestFocus();
     }
 
-    public static void showWindowManagerDialog1(Context context,String content ){
-        final WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    public static WindowManager wm;
+    public static View showWindowManagerDialog1(Context context,String content ){
+            wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         final  WindowManager.LayoutParams para = new WindowManager.LayoutParams();
 
         int screenWidth = wm.getDefaultDisplay().getWidth();
@@ -296,6 +300,7 @@ public class LogUtils {
                 wm.removeView(contentView);
             }
         });
+
             new Thread() {
                 public void run() {
 
@@ -304,7 +309,7 @@ public class LogUtils {
                     Looper.loop();
                 }
             }.start();
-
+        return contentView;
     }
     public static Activity findActivity(Context context) {
         if (context instanceof Activity) {
@@ -433,6 +438,7 @@ public class LogUtils {
 
     public static void main(String args[]) {
         System.out.println("Hello World!"+compare("20200311","20200312"));
+
 
 
     }

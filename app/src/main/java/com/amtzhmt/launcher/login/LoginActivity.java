@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.amtzhmt.launcher.R;
-import com.amtzhmt.launcher.home.HomeActivity;
+import com.amtzhmt.launcher.advert.AdvertActivity;
 import com.amtzhmt.launcher.mvp.MVPBaseActivity;
 import com.amtzhmt.launcher.util.utils.DialogCallback;
 import com.amtzhmt.launcher.util.utils.LogUtils;
@@ -71,7 +71,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
     @Override
     public void getdatasuccess(String data) {
         LogUtils.toast(this,"获取首页数据成功");
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        Intent intent = new Intent(LoginActivity.this, AdvertActivity.class);
         intent.putExtra("data",data);
 
         startActivity(intent);

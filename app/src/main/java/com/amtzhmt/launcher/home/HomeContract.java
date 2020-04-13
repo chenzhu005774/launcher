@@ -20,6 +20,11 @@ public class HomeContract {
 
         void needUpdateSys(String url);
         void unneedUpdateSys(String message);
+
+        void getPageSuccess(String data);
+        void getPageFail();
+
+
     }
 
     interface  Presenter extends BasePresenter<View> {
@@ -33,5 +38,7 @@ public class HomeContract {
         void getUpdateApkinfo( int version);
 
         void getUpdateSysinfo(String version);
+
+        void getPageInfo();
     }
 }

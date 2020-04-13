@@ -39,4 +39,8 @@ public interface ApiService {
     //获取系统升级信息
     @GET("apk/stbSystem/findPage")
     Call<ResponseBody> getSysInfo( @Query("pageNumber")int pageNumber , @Query("pagesize")int pagesize);
+    //获取系统升级信息
+    @GET("apk/advert/findPage")
+//    Call<ResponseBody> getAdvert( @Query("orgCode")String  orgCode , @Query("pageNumber")int pageNumber , @Query("pagesize")int pagesize);
+    Call<ResponseBody> getAdvert(  @Query("pageNumber")int pageNumber , @Query("pagesize")int pagesize);
 }

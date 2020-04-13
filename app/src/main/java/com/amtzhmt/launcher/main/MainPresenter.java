@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-import com.amtzhmt.launcher.home.HomeActivity;
+import com.amtzhmt.launcher.advert.AdvertActivity;
 import com.amtzhmt.launcher.login.LoginActivity;
 import com.amtzhmt.launcher.mvp.BasePresenterImpl;
 import com.amtzhmt.launcher.util.utils.DialogCallback;
@@ -45,7 +45,6 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 handler.removeCallbacks(this);
                 // handler.postDelayed(changePross, 1000);
                 // 网络已经连接跳转 获取token 登录 如果上次已经登录的话那么在后台给他登录
-
                 final CustomerInfoDB customerInfoDB = new CustomerInfoDB(mView.getContext());
                 Api.getDefault().getLoginToken().enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -97,7 +96,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                                                         mView.getpageFail("get page  fail");
                                                     }else {
                                                         mView.getpageSuccess("get page success");
-                                                        mView.gotoNextActivity(result,HomeActivity.class);
+                                                        mView.gotoNextActivity(result,AdvertActivity.class);
                                                     }
                                                     return;
                                                 } catch (Exception e) {

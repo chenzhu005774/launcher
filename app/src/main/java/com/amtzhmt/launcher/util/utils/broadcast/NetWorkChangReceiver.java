@@ -8,6 +8,8 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.amtzhmt.launcher.App;
@@ -24,14 +26,36 @@ import java.io.InputStreamReader;
 public class NetWorkChangReceiver extends BroadcastReceiver implements DialogCallback{
  Context context;
  boolean IsInterrupt = false; //是否断网中
+     View view ;
  Handler handler = new Handler();
-    Runnable runnable =  new Runnable() {
+    Runnable success =  new Runnable() {
         @Override
         public void run() {
-            LogUtils.showWindowManagerDialog1(context, "网络连接成功");
+            try {
+                if (view!=null){
+                    LogUtils.wm.removeView(view);
+                }
+            }catch (Exception e){
+
+            }
+
+            view=  LogUtils.showWindowManagerDialog1(context, "网络连接成功");
         }
     };
+    Runnable fail =  new Runnable() {
+        @Override
+        public void run() {
+            try {
+                if (view!=null){
+                    LogUtils.wm.removeView(view);
+                }
+            }catch (Exception e){
 
+            }
+
+            view=  LogUtils.showWindowManagerDialog1(context, "网络断开,请检查网络设置,点击设置跳转网络设置");
+        }
+    };
     @Override
     public void onReceive(Context context, Intent intent) {
         this.context = context;
@@ -39,12 +63,13 @@ public class NetWorkChangReceiver extends BroadcastReceiver implements DialogCal
             if (isWirePluggedIn()) {
                 LogUtils.i("收到插上线的广播");
                 if (IsInterrupt) {
-                    handler.removeCallbacks(runnable);
-                    handler.postDelayed(runnable,1500);
+                    handler.removeCallbacks(success);
+                    handler.postDelayed(success,1500);
                 }
             } else {
                 IsInterrupt = true;
-                LogUtils.showWindowManagerDialog1(context, "网络断开,请检查网络设置,点击设置跳转网络设置");
+                handler.removeCallbacks(fail);
+                handler.postDelayed(fail,1500);
             }
         }
     }

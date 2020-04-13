@@ -21,12 +21,9 @@ public class Api {
     public static final int READ_TIME_OUT = 2000;
     //连接时长，单位：毫秒
     public static final int CONNECT_TIME_OUT = 2000;
-
     public static  String  token = "";
-
     private static Api retrofitManager = null;
     public ApiService movieService;
-
     private final String basUrl = Constant.BASEURL;
 
     /**
@@ -48,7 +45,7 @@ public class Api {
         BasicParamsInterceptor basicParamsInterceptor =
                 new BasicParamsInterceptor.Builder()
                         .addParam("reqTime",  "")
-//                        .addParam("token", "123")
+//                      .addParam("token", "123")
                         .addHeaderLine("Content-Type:application/x-www-form-urlencoded; charset=utf-8")
                         .addHeaderParam("token",token) //添加头
                         .build();

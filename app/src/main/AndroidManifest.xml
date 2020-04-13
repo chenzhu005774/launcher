@@ -35,6 +35,7 @@
         </activity>
         <activity android:name=".main.MainActivity" />
         <activity android:name=".home.HomeActivity"/>
+        <activity android:name=".advert.AdvertActivity"/>
         <activity android:name=".channelplay.ChannelplayActivity" />
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".catalog.CatalogActivity" />

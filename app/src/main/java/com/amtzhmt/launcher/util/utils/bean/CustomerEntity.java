@@ -11,6 +11,7 @@ public class CustomerEntity implements Serializable {
     private  String  mac;
     private  String  flag;
     private  String  code;
+    private  String  orgcode;
 
     public String getName() {
         return name;
@@ -50,5 +51,13 @@ public class CustomerEntity implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getOrgcode() {
+        return orgcode;
+    }
+
+    public void setOrgcode(String orgcode) {
+        this.orgcode = orgcode;
     }
 }

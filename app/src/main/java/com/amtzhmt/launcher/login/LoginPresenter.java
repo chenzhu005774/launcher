@@ -45,6 +45,7 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
                     customerEntity.setName(name);
                     customerEntity.setPwd(pwd);
                     customerEntity.setCode(customerCode);
+                    customerEntity.setOrgcode(orgCode);
                     customerEntity.setMac(getMacDefault(mView.getContext()));
                     customerInfoDB.saveObject(customerEntity);
                     mView.loginsuccess(result);

@@ -29,7 +29,9 @@ final public class VideoViewTool implements MediaPlayer.OnErrorListener,MediaPla
 
         rootlayout.setFocusable(videoViewToolBean.focus);
         if (videoViewToolBean.focus){
-            rootlayout.setBackgroundResource(R.drawable.bgseletor);
+            if (videoViewToolBean.width!=1280&videoViewToolBean.heigh!=720) {
+                rootlayout.setBackgroundResource(R.drawable.bgseletor);
+            }
         }
         RelativeLayout.LayoutParams params =  new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         if (videoViewToolBean.focus){
@@ -53,9 +55,15 @@ final public class VideoViewTool implements MediaPlayer.OnErrorListener,MediaPla
         commonBean.getLayout().addView(rootlayout);
 
         //设置视频路径
-        videoView.setVideoURI(Uri.parse(videoViewToolBean.getUrl()));
+        if (videoViewToolBean.getType()==1) {
+            videoView.setVideoURI(Uri.parse(videoViewToolBean.getUrl()));
+            rootlayout.requestFocus();
+        }else {
+           videoView.setVideoURI (Uri.parse(Constant.VIDEOEHTTP+videoViewToolBean.getUrl()));
+//            videoView.setFocusable(false);
+        }
         videoView.setOnErrorListener(this);
-        rootlayout.requestFocus();
+
         videoView.setOnPreparedListener(this);
 
     }

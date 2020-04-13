@@ -9,11 +9,13 @@ import android.widget.Toast;
 import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.push.clientService;
 import com.amtzhmt.launcher.util.utils.bean.ChannelEntity;
+import com.amtzhmt.launcher.util.utils.bean.CustomerEntity;
 import com.amtzhmt.launcher.util.utils.bean.ListItemBean;
 import com.amtzhmt.launcher.util.utils.commonbean.CommonBean;
 import com.amtzhmt.launcher.util.utils.image.ViewbgLoader;
 import com.amtzhmt.launcher.mvp.BasePresenterImpl;
 import com.amtzhmt.launcher.util.utils.net.Api;
+import com.amtzhmt.launcher.util.utils.sqlite.CustomerInfoDB;
 import com.amtzhmt.launcher.util.utils.toolview.BannerViewTool;
 import com.amtzhmt.launcher.util.utils.toolview.BannerViewToolBean;
 import com.amtzhmt.launcher.util.utils.toolview.ImageViewTool;
@@ -295,10 +297,18 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
                         videoViewToolBean.setMarleft( itemcJson.getInt("left"));
                         videoViewToolBean.setMartop(itemcJson.getInt("top"));
                         if (itemcJson.getJSONObject("resource").getJSONArray("resourceData").length()!=0) {
-                            videoViewToolBean.setUrl(itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getString("url"));
+                              if (itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getInt("type")==1){
+                                  videoViewToolBean.setType(1);
+                                  videoViewToolBean.setUrl(itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getString("url"));
+                              }else {
+                                  videoViewToolBean.setUrl(itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getString("videoUrl"));
+                                  videoViewToolBean.setType(2);
+                                }
                         }else {
                             videoViewToolBean.setUrl("http://192.168.2.170:9901/tsfile/live/0009_1.m3u8?key=txiptv&playlive=1&authid=0");
+                            videoViewToolBean.setType(1);
                         }
+
                         commonBean.setTag(videoViewToolBean);
                         videoViewTool.creatview(videoViewToolBean,commonBean);
                         break;
@@ -420,6 +430,42 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
         });
     }
 
+    @Override
+    public void getPageInfo() {
+        CustomerInfoDB customerInfoDB = new CustomerInfoDB(mView.getContext());
+        List<CustomerEntity> list = customerInfoDB.getAllObject();
+        if(list.size()==0){
+            return;
+        }
+        CustomerEntity customerEntity =list.get(0);
+        if (customerEntity.getOrgcode()==null||customerEntity.getOrgcode().equals("")){
+            customerEntity.setOrgcode(customerEntity.getCode());
+        }
+        Api.getDefault().getPage(customerEntity.getOrgcode(), customerEntity.getCode()).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result  = response.body().string();
+                    JSONObject jSONObject = new JSONObject(result);
+                    String data = jSONObject.getString("data");
+                    if (data==null||data.equals("")||data.equals("null")){
+                        mView.getPageFail();
+                    }else {
+                        mView.getPageSuccess(result);
+                    }
+                } catch ( Exception e) {
+                    e.printStackTrace();
+                    mView.getPageFail();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                mView.getPageFail();
+            }
+        });
+
+    }
 
 
 }

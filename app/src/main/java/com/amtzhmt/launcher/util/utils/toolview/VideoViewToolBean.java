@@ -11,6 +11,8 @@ public class VideoViewToolBean {
     boolean focus;
     String url;//视屏地址
 
+    int type;//1 是直播 2是点播放
+
     public int getWidth() {
         return width;
     }
@@ -59,5 +61,14 @@ public class VideoViewToolBean {
 
     public void setFocus(boolean focus) {
         this.focus = focus;
+    }
+
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

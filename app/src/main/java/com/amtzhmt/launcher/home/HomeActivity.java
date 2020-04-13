@@ -26,7 +26,6 @@ import com.amtzhmt.launcher.webview.WebviewActivity;
 
 import static com.amtzhmt.launcher.util.utils.CheckNet.getMacDefault;
 
-
 /**
  * MVPPlugin
  *  邮箱 784787081@qq.com
@@ -44,9 +43,21 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
         parentlayout  =  (RelativeLayout)findViewById(R.id.root);
         Intent intent =getIntent();
         //getXxxExtra方法获取Intent传递过来的数据
-        String data=intent.getStringExtra("data");
-        result = data;
-        mPresenter.initData(result,this,this,parentlayout);
+        String data =null;
+        try {
+            data =intent.getStringExtra("data");
+        }catch (Exception e){
+            LogUtils.i("chenzhu--><获取前面过来的时候报错了");
+        }
+        if (data!=null){
+            LogUtils.i("chenzhu--><前面过来的");
+            result =data;
+            getPageSuccess(data);
+        }else {
+            // 直接拉起首页那么 也可以
+            LogUtils.i("chenzhu--><重新请求");
+            mPresenter.getPageInfo();
+        }
         mPresenter.startClien(this); //开启心跳 连接
         //升级
         mPresenter.getUpdateApkinfo(LogUtils.getVersionCode(this));
@@ -67,7 +78,7 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
     @Override
     public void initFail() {
     LogUtils.toast(this,"布局失败...:"+getMacDefault(this));
-    LogUtils.showDialog(this,"布局失败,点击重试",this);
+    LogUtils.showDialog(this,"布局失败,请确定布局数据后点击重试",this);
     LogUtils.i("build.prop info :"+android.os.Build.VERSION.RELEASE+LogUtils. getSystemProperty("build.prop")+"\n"+
         //VERSION.RELEASE 固件版本
         ", VERSION.RELEASE: " + android.os.Build.VERSION.RELEASE+"\n"+
@@ -98,12 +109,22 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
     }
 
     @Override
+    public void getPageSuccess(String data) {
+        result = data;
+        mPresenter.initData(result,this,this,parentlayout);
+    }
+
+    @Override
+    public void getPageFail() {
+        LogUtils.showDialog(this,"获取布局失败信息,请确认模板状态正常",this);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         if (PLAYSTATUS!=Constant.UNINIT){
             mPresenter.start();
         }
-
     }
 
     @Override
@@ -113,9 +134,14 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
             mPresenter.pause();
             PLAYSTATUS = Constant.PAUSE;
             Intent intent = new Intent();
-            intent.setClass(this, ChannelplayActivity.class);
             intent.putExtra("url",((VideoViewToolBean) object).getUrl());
+            if (((VideoViewToolBean) object).getType()==1){
+                intent.setClass(this, ChannelplayActivity.class);
+            }else {
+                intent.setClass(this,VodplayActivity.class);
+            }
             startActivity(intent);
+
             return;
         }else if (object instanceof ImageViewToolBean){
 
@@ -163,7 +189,7 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
 
     @Override
     public void clickSure() {
-        mPresenter.initData(result,this,this,parentlayout);
+        mPresenter.getPageInfo();
     }
 
 

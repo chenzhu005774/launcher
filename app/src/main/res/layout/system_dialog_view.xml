@@ -38,7 +38,8 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:id="@+id/dialog_sure"
-        android:background="@mipmap/surebg"
+
+        android:background="@drawable/bgseletor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
