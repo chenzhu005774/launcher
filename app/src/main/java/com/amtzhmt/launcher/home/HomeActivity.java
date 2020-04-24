@@ -1,6 +1,7 @@
 package com.amtzhmt.launcher.home;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
@@ -19,10 +20,14 @@ import com.amtzhmt.launcher.util.utils.UpdateManager;
 import com.amtzhmt.launcher.util.utils.annima.RotationAnimation;
 import com.amtzhmt.launcher.mvp.MVPBaseActivity;
 import com.amtzhmt.launcher.util.utils.LogUtils;
+import com.amtzhmt.launcher.util.utils.bean.CustomerEntity;
+import com.amtzhmt.launcher.util.utils.sqlite.CustomerInfoDB;
 import com.amtzhmt.launcher.util.utils.toolview.ImageViewToolBean;
 import com.amtzhmt.launcher.util.utils.toolview.VideoViewToolBean;
 import com.amtzhmt.launcher.vodplay.VodplayActivity;
 import com.amtzhmt.launcher.webview.WebviewActivity;
+
+import java.util.List;
 
 import static com.amtzhmt.launcher.util.utils.CheckNet.getMacDefault;
 
@@ -71,7 +76,8 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
         DisplayMetrics dm = getResources().getDisplayMetrics();
         int screenWidth = dm.widthPixels;
         int screenHeight = dm.heightPixels;
-        LogUtils.showDialog(this,"this APK version:"+versioncode+" 基带版本："+android.os.Build.VERSION.INCREMENTAL);
+        LogUtils.showDialog(this,"this APK version:"+versioncode+" 基带版本："+android.os.Build.VERSION.INCREMENTAL+
+                ", VERSION.MAC: " + mPresenter.invokeSystem("ro.mac","-1"));
         PLAYSTATUS = Constant.PLAY;
     }
 
@@ -84,8 +90,8 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
         ", VERSION.RELEASE: " + android.os.Build.VERSION.RELEASE+"\n"+
         ", VERSION.CODENAME: " + android.os.Build.VERSION.CODENAME+"\n"+
          //VERSION.INCREMENTAL 基带版本
-        ", VERSION.INCREMENTAL: " + android.os.Build.VERSION.INCREMENTAL+"\n"
-        )   ;
+        ", VERSION.INCREMENTAL: " + android.os.Build.VERSION.INCREMENTAL+"\n"+
+        ", VERSION.MAC: " + mPresenter.invokeSystem("ro.mac","-1"));
     }
 
     @Override
@@ -116,7 +122,7 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
 
     @Override
     public void getPageFail() {
-        LogUtils.showDialog(this,"获取布局失败信息,请确认模板状态正常",this);
+        LogUtils.showDialog(this,"获取布局失败信息,请确认网络和模板状态正常",this);
     }
 
     @Override
@@ -170,6 +176,10 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
 
     }
 
+    //退出时的时间
+    private long showTime;
+
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -182,6 +192,18 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
 //            mPresenter.jumpApk("com.inpor.fmctv",this);
         }else if (keyCode ==KeyEvent.KEYCODE_1){
             CleanMessageUtil.clearAllCache(getApplicationContext());
+        }else if (keyCode ==KeyEvent.KEYCODE_2){
+            if ((System.currentTimeMillis() - showTime) > 800) {
+                showTime = System.currentTimeMillis();
+            } else {
+                // 展示后门信息
+                String is12 =  Settings.System.getString(this.getContentResolver(),Settings.System.TIME_12_24);
+                CustomerInfoDB customerInfoDB=    new CustomerInfoDB(this);
+                List<CustomerEntity> list = customerInfoDB.getAllObject();
+                LogUtils.showDialog(this,"账号: "+list.get(0).getName()+"\n"+
+                                         "MAC: "+mPresenter.invokeSystem("ro.mac","-1")+"\n"+
+                                         "日期: "+is12+"小时制" ,null);
+            }
         }
 
         return super.onKeyDown(keyCode, event);

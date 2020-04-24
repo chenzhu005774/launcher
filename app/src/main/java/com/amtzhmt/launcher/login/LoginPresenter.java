@@ -16,6 +16,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.amtzhmt.launcher.util.utils.CheckNet.getMacDefault;
+import static com.amtzhmt.launcher.util.utils.CheckNet.invokeSystem;
 
 /**
  * MVPPlugin
@@ -38,7 +39,9 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
                     String result = response.body().string();
                     JSONObject jSONObject = new JSONObject(result);
                     String orgCode = jSONObject.getJSONObject("data").getString("orgCode");
-                    String customerCode=jSONObject.getJSONObject("data").getString("customerCode");
+//                    String customerCode=jSONObject.getJSONObject("data").getString("customerCode");
+//                    这里全部改为orgcode
+                    String customerCode=jSONObject.getJSONObject("data").getString("orgCode");
                     //登录成功后 将他存入本地mysql
                     CustomerInfoDB customerInfoDB = new CustomerInfoDB(mView.getContext());
                     CustomerEntity customerEntity = new CustomerEntity();
@@ -46,7 +49,7 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
                     customerEntity.setPwd(pwd);
                     customerEntity.setCode(customerCode);
                     customerEntity.setOrgcode(orgCode);
-                    customerEntity.setMac(getMacDefault(mView.getContext()));
+                    customerEntity.setMac(invokeSystem("ro.mac","-1"));
                     customerInfoDB.saveObject(customerEntity);
                     mView.loginsuccess(result);
                     Api.getDefault().getPage(orgCode, customerCode).enqueue(new Callback<ResponseBody>() {
@@ -88,7 +91,7 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
 
     @Override
     public void bindMac() {
-        Api.getDefault().bindMacToAccount(getMacDefault(mView.getContext())).enqueue(new Callback<ResponseBody>() {
+        Api.getDefault().bindMacToAccount(invokeSystem("ro.mac","-1")).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {

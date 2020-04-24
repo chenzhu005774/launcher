@@ -8,6 +8,7 @@ import android.net.wifi.WifiManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 
+import java.lang.reflect.Method;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
@@ -76,6 +77,19 @@ public class CheckNet {
         return m_szAndroidID;
     }
 
+    public  static String invokeSystem(String key, String defvalue) {
+        try {
+            Class clazz = Class.forName("android.os.SystemProperties");
+            Method getter = clazz.getDeclaredMethod("get", String.class);
+            String value = (String) getter.invoke(null, key);
+            if (!TextUtils.isEmpty(value)) {
+                return value;
+            }
+        } catch (Exception e) {
+            LogUtils.i( "Unable to read system properties");
+        }
+        return defvalue;
+    }
 
 
     public static String getLocalEthernetMacAddress() {

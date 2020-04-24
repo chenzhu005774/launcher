@@ -18,6 +18,7 @@ import com.amtzhmt.launcher.util.utils.sqlite.CustomerInfoDB;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,12 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                             String token = jSONObject.getString("data");
                             Api.token = token;
                             mView.getTokenSuccess("get token success");
+
+                            List<CustomerEntity> count = customerInfoDB.getAllObject();
+                            if (count.size() != 0) {
+                                //这里全部都去重新登录
+                                customerInfoDB.deleteAll();
+                            }
                             List<CustomerEntity> list = customerInfoDB.getAllObject();
                             if (list.size() == 0) {
                                 mView.gotoNextActivity(null,LoginActivity.class);
@@ -64,61 +71,61 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                                 return;
                             } else {
                                 //登录
-                                CustomerEntity customerEntity = list.get(0);
-                                Map<String, String> hashMap = new HashMap();
-                                hashMap.put("iptvAccount", customerEntity.getName());
-                                hashMap.put("mac", customerEntity.getMac());
-                                hashMap.put("password", customerEntity.getPwd());
-                                Api.getDefault().login(hashMap).enqueue(new Callback<ResponseBody>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        String orgCode = "";
-                                        String customerCode = "";
-                                        try {
-                                            String result = response.body().string();
-                                            JSONObject jSONObject = new JSONObject(result);
-                                            orgCode = jSONObject.getJSONObject("data").getString("orgCode");
-                                            customerCode = jSONObject.getJSONObject("data").getString("customerCode");
-                                            mView.loginSuccess("login success");
-                                        } catch (Exception e) {
-                                            LogUtils.i("chenzhu--login fail->e"+e+" token" + Api.token);
-                                            mView.loginFail("login success getdata fail");
-                                            return;
-                                        }
-                                        Api.getDefault().getPage(orgCode, customerCode).enqueue(new Callback<ResponseBody>() {
-                                            @Override
-                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                try {
-                                                    String result = response.body().string();
-                                                    JSONObject jSONObject = new JSONObject(result);
-                                                    String data = jSONObject.getString("data");
-                                                    if (data==null||data.equals("")||data.equals("null")){
-                                                        mView.getpageFail("get page  fail");
-                                                    }else {
-                                                        mView.getpageSuccess("get page success");
-                                                        mView.gotoNextActivity(result,AdvertActivity.class);
-                                                    }
-                                                    return;
-                                                } catch (Exception e) {
-                                                    mView.getpageFail("get page  fail");
-                                                    e.printStackTrace();
-                                                    return;
-                                                }
-                                            }
-                                            @Override
-                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                LogUtils.i(" --" + t);
-                                                mView.getpageFail("get page  fail");
-                                                return;
-                                            }
-                                        });
-                                    }
-                                    @Override
-                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        mView.loginFail("login fail");
-                                        return;
-                                    }
-                                });
+//                                CustomerEntity customerEntity = list.get(0);
+//                                Map<String, String> hashMap = new HashMap();
+//                                hashMap.put("iptvAccount", customerEntity.getName());
+//                                hashMap.put("mac", customerEntity.getMac());
+//                                hashMap.put("password", customerEntity.getPwd());
+//                                Api.getDefault().login(hashMap).enqueue(new Callback<ResponseBody>() {
+//                                    @Override
+//                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                                        String orgCode = "";
+//                                        String customerCode = "";
+//                                        try {
+//                                            String result = response.body().string();
+//                                            JSONObject jSONObject = new JSONObject(result);
+//                                            orgCode = jSONObject.getJSONObject("data").getString("orgCode");
+//                                            customerCode = jSONObject.getJSONObject("data").getString("orgCode");
+//                                            mView.loginSuccess("login success");
+//                                        } catch (Exception e) {
+//                                            LogUtils.i("chenzhu--login fail->e"+e+" token" + Api.token);
+//                                            mView.loginFail("login success getdata fail");
+//                                            return;
+//                                        }
+//                                        Api.getDefault().getPage(orgCode, customerCode).enqueue(new Callback<ResponseBody>() {
+//                                            @Override
+//                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                                                try {
+//                                                    String result = response.body().string();
+//                                                    JSONObject jSONObject = new JSONObject(result);
+//                                                    String data = jSONObject.getString("data");
+//                                                    if (data==null||data.equals("")||data.equals("null")){
+//                                                        mView.getpageFail("get page  fail");
+//                                                    }else {
+//                                                        mView.getpageSuccess("get page success");
+//                                                        mView.gotoNextActivity(result,AdvertActivity.class);
+//                                                    }
+//                                                    return;
+//                                                } catch (Exception e) {
+//                                                    mView.getpageFail("get page  fail");
+//                                                    e.printStackTrace();
+//                                                    return;
+//                                                }
+//                                            }
+//                                            @Override
+//                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                                                LogUtils.i(" --" + t);
+//                                                mView.getpageFail("get page  fail");
+//                                                return;
+//                                            }
+//                                        });
+//                                    }
+//                                    @Override
+//                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                                        mView.loginFail("login fail");
+//                                        return;
+//                                    }
+//                                });
                             }
 
                         } catch (Exception e) {

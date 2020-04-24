@@ -90,6 +90,14 @@ public class CustomerInfoDB {
             return s.size();
 
     }
+    public void  deleteAll() {
+        SQLiteHelper dbhelper = SQLiteHelper.getInstens(context);
+        SQLiteDatabase database = dbhelper.getReadableDatabase();
+        database.execSQL("delete from customertable");
+
+    }
+
+
 
  /**
   *@author chenzhu

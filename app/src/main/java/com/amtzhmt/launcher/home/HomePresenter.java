@@ -2,6 +2,7 @@ package com.amtzhmt.launcher.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ import com.amtzhmt.launcher.util.utils.LogUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -199,7 +201,9 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
                             imageViewToolBean_f.setBindType(itemcJson.getJSONObject("resource").getInt("type"));
                             imageViewToolBean_f.setContentType(itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getInt("type"));
                             String customercode = itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getString("customerCode");
-                            String parentcode = itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getString("code");
+//                            String parentcode = itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getString("code");
+                            String parentcode = itemcJson.getJSONObject("resource") .getString("resourceCode");
+
                             String url = itemcJson.getJSONObject("data").getString("url");
                             if(url.isEmpty()){
                                 imageViewToolBean_f.setJumpurl("");
@@ -297,7 +301,7 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
                         videoViewToolBean.setMarleft( itemcJson.getInt("left"));
                         videoViewToolBean.setMartop(itemcJson.getInt("top"));
                         if (itemcJson.getJSONObject("resource").getJSONArray("resourceData").length()!=0) {
-                              if (itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getInt("type")==1){
+                              if (itemcJson.getJSONObject("resource").getInt("type")==5){
                                   videoViewToolBean.setType(1);
                                   videoViewToolBean.setUrl(itemcJson.getJSONObject("resource").getJSONArray("resourceData").getJSONObject(0).getString("url"));
                               }else {
@@ -466,6 +470,22 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
         });
 
     }
+
+    @Override
+    public String invokeSystem(String key, String defvalue) {
+        try {
+             Class clazz = Class.forName("android.os.SystemProperties");
+             Method getter = clazz.getDeclaredMethod("get", String.class);
+             String value = (String) getter.invoke(null, key);
+             if (!TextUtils.isEmpty(value)) {
+                return value;
+               }
+             } catch (Exception e) {
+            LogUtils.i( "Unable to read system properties");
+          }
+         return defvalue;
+    }
+
 
 
 }

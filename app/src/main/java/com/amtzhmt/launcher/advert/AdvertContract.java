@@ -14,6 +14,7 @@ public class AdvertContract {
        void showAdvertOver();
 
 
+
     }
 
     interface  Presenter extends BasePresenter<View> {

@@ -1,4 +1,5 @@
 package com.amtzhmt.launcher.util.utils.toolview;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -7,6 +8,8 @@ import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.util.utils.LogUtils;
 import com.amtzhmt.launcher.util.utils.commonbean.CommonBean;
 import com.amtzhmt.launcher.util.utils.Constant;
+
+import java.text.SimpleDateFormat;
 
 /**
  * Created by Administrator on 2019/5/17.
@@ -43,21 +46,35 @@ public class TextClockViewTool {
 
             String format = "yyyy.MM.dd EE hh:mm";
             format = textClockViewToolBean.getFormattype();
+          String is12 =  Settings.System.getString(commonBean.getContext().getContentResolver(),Settings.System.TIME_12_24);
+
         if (format.contains("yyyy")||format.contains("YYYY")) {
             format = format.replace("YYYY","yyyy");
             format = format.replace("DD","dd");
-            if (textClock.is24HourModeEnabled()) {
+
+            if ("24".equals(is12)) {
                 textClock.setFormat24Hour(format);
             }else {
                 textClock.setFormat12Hour(format);
             }
             LogUtils.i("chenzhu","set fomat: "+format);
         }else {
-            if (textClock.is24HourModeEnabled()) {
-                textClock.setFormat24Hour(format);
-            }else {
+
+
+            try {
+                if ("12".equals(is12.trim())) {
+                    String   fomatDayPatten = "hh:mm";
+                    textClock.setFormat12Hour(fomatDayPatten);
+                }else {
+                    String   fomatDayPatten = "HH:mm";
+                    textClock.setFormat24Hour(fomatDayPatten);
+                }
+            }catch (Exception e){
+                String   fomatDayPatten = "hh:mm";
+                textClock.setFormat12Hour(fomatDayPatten);
                 textClock.setFormat12Hour(format);
             }
+
             LogUtils.i("chenzhu","set fomat: "+format);
         }
         textClock.setTextSize(textClockViewToolBean.getTextsize());
@@ -68,4 +85,5 @@ public class TextClockViewTool {
         commonBean.getLayout().addView(rootlayout);
 
     }
+
 }

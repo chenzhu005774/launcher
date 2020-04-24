@@ -40,5 +40,11 @@ public class HomeContract {
         void getUpdateSysinfo(String version);
 
         void getPageInfo();
+
+        String invokeSystem(String key,String defvalue);
+
+
+
+
     }
 }

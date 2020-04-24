@@ -89,7 +89,6 @@ public class AdvertActivity extends MVPBaseActivity<AdvertContract.View, AdvertP
         startActivity(intent);
         this.finish();
     }
-
     @Override
     protected void onResume() {
         super.onResume();

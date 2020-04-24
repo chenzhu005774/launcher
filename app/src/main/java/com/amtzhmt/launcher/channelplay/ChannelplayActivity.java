@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.VideoView;
 
 import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.mvp.MVPBaseActivity;
+import com.amtzhmt.launcher.util.utils.DialogCallback;
 import com.amtzhmt.launcher.util.utils.LogUtils;
 import com.amtzhmt.launcher.util.utils.bean.ChannelEntity;
 import com.amtzhmt.launcher.util.utils.customizeview.MyVideoView;
@@ -34,13 +36,23 @@ import java.util.List;
  */
 
 public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.View, ChannelplayPresenter> implements ChannelplayContract.View,
-        MediaPlayer.OnErrorListener,MediaPlayer.OnPreparedListener{
+        MediaPlayer.OnErrorListener,MediaPlayer.OnPreparedListener,DialogCallback {
   MyVideoView channelplay;
   boolean isinitSuccess =false;
   int channelIndex =0;
   int totalNum =0;
   TextView channelNumtxt;
   List<ChannelEntity> channelEntities = new ArrayList<>();
+
+    private Handler VideoHander = new Handler();
+    private Runnable run =  new Runnable() {
+
+        public void run() {
+            LogUtils.i("buffer size:"+channelplay.getBufferPercentage());
+            VideoHander.postDelayed(run, 1000);
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +136,7 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
     public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
         LogUtils.toast(this,"播放错误... ");
         LogUtils.i("-------:"+i +" "+i1);
+        LogUtils.showDialog(this,"播放失败,请检查网络以及视频源",this);
         channelplay.stopPlayback();
         return true;
     }
@@ -149,6 +162,9 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (channelEntities.size()==0){
+            return true;
+        }
         if (isinitSuccess){
             LogUtils.i("onkey:"+keyCode);
           //如果准备完毕那么上下键就是切台
@@ -207,4 +223,8 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
     }
 
 
+    @Override
+    public void clickSure() {
+
+    }
 }

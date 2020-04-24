@@ -28,11 +28,7 @@ final public class VideoViewTool implements MediaPlayer.OnErrorListener,MediaPla
         rootlayout.setOnFocusChangeListener(this);
 
         rootlayout.setFocusable(videoViewToolBean.focus);
-        if (videoViewToolBean.focus){
-            if (videoViewToolBean.width!=1280&videoViewToolBean.heigh!=720) {
-                rootlayout.setBackgroundResource(R.drawable.bgseletor);
-            }
-        }
+        rootlayout.setBackgroundResource(R.drawable.bgseletor);
         RelativeLayout.LayoutParams params =  new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         if (videoViewToolBean.focus){
             params.setMargins(videoViewToolBean.getMarleft()-Constant.margin,videoViewToolBean.getMartop()- Constant.margin,0,0);
@@ -60,12 +56,11 @@ final public class VideoViewTool implements MediaPlayer.OnErrorListener,MediaPla
             rootlayout.requestFocus();
         }else {
            videoView.setVideoURI (Uri.parse(Constant.VIDEOEHTTP+videoViewToolBean.getUrl()));
-//            videoView.setFocusable(false);
         }
         videoView.setOnErrorListener(this);
 
         videoView.setOnPreparedListener(this);
-
+        rootlayout.requestFocus();
     }
 
 

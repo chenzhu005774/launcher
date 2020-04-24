@@ -1,9 +1,14 @@
 package com.amtzhmt.launcher.advert;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
+import android.provider.Settings;
 import android.view.View;
+import android.widget.Toast;
+
+import com.amtzhmt.launcher.home.HomeActivity;
 import com.amtzhmt.launcher.mvp.BasePresenterImpl;
 import com.amtzhmt.launcher.util.utils.Constant;
 import com.amtzhmt.launcher.util.utils.LogUtils;
@@ -31,6 +36,7 @@ import retrofit2.Response;
  */
 public class AdvertPresenter extends BasePresenterImpl<AdvertContract.View> implements AdvertContract.Presenter{
      MyVideoView videoView;
+    MediaPlayer mediaPlayer;
     @Override
     public void getAdvetrInfo() {
         final CustomerInfoDB customerInfoDB = new CustomerInfoDB(mView.getContext());
@@ -120,7 +126,6 @@ public class AdvertPresenter extends BasePresenterImpl<AdvertContract.View> impl
     Runnable runnable =   new Runnable() {
         @Override
         public void run() {
-            videoView.stopPlayback();
             mView.showAdvertOver();
         }
     };
@@ -171,17 +176,21 @@ public class AdvertPresenter extends BasePresenterImpl<AdvertContract.View> impl
             videoView = (MyVideoView)view;
             videoView.setVisibility(View.VISIBLE);
             videoView.setVideoURI(Uri.parse(Constant.VIDEOEHTTP+advertInfo.getVideoUrl()));
+            videoView.start();
+
+//            Toast.makeText(mView.getContext(), "chenzhu----->这里这里:"+ Settings.System.getString(mView.getContext().getContentResolver(),
+//                    Settings.System.TIME_12_24),Toast.LENGTH_SHORT).show();
             if (advertInfo.getDisplayMethod()==0){
+
                 // 按照视频时长播放完成
                 videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
                       //  播放结束去首页
-                        mp.stop();
-                        mp.release();
-                        mView.showAdvertOver();
+                       mView.showAdvertOver();
                     }
                 });
+
             }else {
                 LogUtils.i("chenzhu----->这里这里");
                 // 按照设置的时长播放完成，但是 如果已经视频不够长 还是就走了
@@ -193,8 +202,6 @@ public class AdvertPresenter extends BasePresenterImpl<AdvertContract.View> impl
                     @Override
                     public void onCompletion(MediaPlayer mp) {
                         //  播放结束去首页
-                        mp.stop();
-                        mp.release();
                         handler.removeCallbacks(runnable);
                         mView.showAdvertOver();
                     }

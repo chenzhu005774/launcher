@@ -50,7 +50,7 @@
 
 
         <LinearLayout
-            android:layout_marginTop="34px"
+            android:layout_marginTop="10px"
             android:layout_width="match_parent"
             android:layout_height="78px"
             android:orientation="horizontal">
