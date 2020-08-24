@@ -25,7 +25,6 @@ public class Api {
     private static Api retrofitManager = null;
     public ApiService movieService;
     private final String basUrl = Constant.BASEURL;
-
     /**
      * 构造方法私有化
      */
