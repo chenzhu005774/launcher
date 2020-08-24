@@ -29,7 +29,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.amtzhmt.launcher.util.utils.CheckNet.getNetMode;
-
 /**
  * MVPPlugin
  *  邮箱 784787081@qq.com

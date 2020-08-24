@@ -36,8 +36,9 @@ public class MyUdpClient extends UDPClientBase {
 			try {
 				JSONObject json = new JSONObject(str);
 				String msg = json.getString("message");
+				String title = json.getString("title");
 				LogUtils.i("AMTPush自定义推送信息:" + msg+" bbbbbbbbbbbb "+App.context);
-				LogUtils.showWindowManagerDialog(App.context,msg);
+				LogUtils.showWindowManagerDialog(App.context,msg,title);
 			}catch (Exception e){
 				LogUtils.i("AMTPush自定义推送信息Exception:"+ e);
 			}

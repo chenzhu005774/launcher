@@ -26,18 +26,24 @@ final public class ImageViewTool  {
 //        rootlayout.setOnFocusChangeListener(commonBean.getFocusChangeListener());
 
         rootlayout.setFocusable(imageViewToolBean.focus);
-        if (imageViewToolBean.focus) {
-            rootlayout.setBackgroundResource(R.drawable.bgseletor);
-        }
 
+        if (imageViewToolBean.getHeigh()!=720&&imageViewToolBean.getWidth()!=1280) {
+            if (imageViewToolBean.focus) {
+                rootlayout.setBackgroundResource(R.drawable.bgseletor);
+            }
+        }
         RelativeLayout.LayoutParams params =  new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        if (imageViewToolBean.focus) {
-            //有背景框的话 就减去背景框的长度
-            params.setMargins(imageViewToolBean.getMarleft()- Constant.margin,imageViewToolBean.getMartop()- Constant.margin,0,0);
-        }else{
-            params.setMargins(imageViewToolBean.getMarleft() ,imageViewToolBean.getMartop() ,0,0);
-        }
 
+        if (imageViewToolBean.getHeigh()!=720&&imageViewToolBean.getWidth()!=1280) {
+
+            if (imageViewToolBean.focus) {
+                //有背景框的话 就减去背景框的长度
+                params.setMargins(imageViewToolBean.getMarleft() - Constant.margin, imageViewToolBean.getMartop() - Constant.margin, 0, 0);
+            } else {
+                params.setMargins(imageViewToolBean.getMarleft(), imageViewToolBean.getMartop(), 0, 0);
+            }
+
+        }
         rootlayout.setLayoutParams(params);
         rootlayout.setTag(commonBean.getTag());
         rootlayout.setOnClickListener(commonBean.getOnClickListener());

@@ -46,7 +46,8 @@ public class AdvertPresenter extends BasePresenterImpl<AdvertContract.View> impl
         }
         CustomerEntity customerEntity =list.get(0);
 
-        Api.getDefault().getAdvert( 1,20).enqueue(new Callback<ResponseBody>() {
+
+        Api.getDefault().getAdvert( 1,20,customerEntity.getCode()).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 String result = null;

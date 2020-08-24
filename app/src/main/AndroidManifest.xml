@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.amtzhmt.launcher">
+    package="com.amtzhmt.launcher"
+    android:sharedUserId="android.uid.system"
+    >
+    <!--android:sharedUserId="android.uid.system"-->
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_CACHE_FILESYSTEM" />
     <uses-permission android:name="android.permission.REBOOT" />
-
-
-
 
     <application
         android:name=".App"
@@ -28,30 +31,43 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <!--<category android:name="android.intent.category.HOME" />-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!-- <category android:name="android.intent.category.HOME" /> -->
+                <!-- <category android:name="android.intent.category.DEFAULT" /> -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".main.MainActivity" />
-        <activity android:name=".home.HomeActivity"/>
-        <activity android:name=".advert.AdvertActivity"/>
+        <activity android:name=".home.HomeActivity" />
+        <activity android:name=".advert.AdvertActivity" />
         <activity android:name=".channelplay.ChannelplayActivity" />
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".catalog.CatalogActivity" />
         <activity android:name=".vodplay.VodplayActivity" />
         <activity android:name=".webview.WebviewActivity" />
-        <!--android:hardwareAccelerated="true"-->
-        <service android:name="com.amtzhmt.launcher.push.clientService"/>
-        <!--监听网络状态-->
-        <receiver android:name=".util.utils.broadcast.NetWorkChangReceiver" >
-            <!--<intent-filter>-->
-                <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
-                <!--<action android:name="android.net.wifi.WIFI_STATE_CHANGED" />-->
-                <!--<action android:name="android.net.wifi.STATE_CHANGE" />-->
-                <!--<action android:name="android.net.ethernet.ETHERNET_STATE_CHANGE" />-->
-            <!--</intent-filter>-->
+        <!-- android:hardwareAccelerated="true" -->
+        <service android:name=".push.clientService" />
+        <!-- 监听网络状态 -->
+        <receiver android:name=".util.utils.broadcast.NetWorkChangReceiver">
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.net.conn.CONNECTIVITY_CHANGE" /> -->
+            <!-- <action android:name="android.net.wifi.WIFI_STATE_CHANGED" /> -->
+            <!-- <action android:name="android.net.wifi.STATE_CHANGE" /> -->
+            <!-- <action android:name="android.net.ethernet.ETHERNET_STATE_CHANGE" /> -->
+            <!-- </intent-filter> -->
         </receiver>
+
+        <receiver
+            android:name=".util.utils.broadcast.SilenceInstallReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

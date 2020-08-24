@@ -8,14 +8,18 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.RecoverySystem;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.amtzhmt.launcher.App;
 import com.amtzhmt.launcher.R;
 import com.amtzhmt.launcher.util.utils.customizeview.CommonDialog;
 
@@ -141,14 +145,19 @@ private static final String saveFileName ="launcher.apk";
       if (!apkfile.exists()) {
          return;
       }
-     LogUtils.i("apk path:"+saveFileName);
-      Intent intent = new Intent();
-      intent.setAction("android.intent.action.VIEW");
-      intent.addCategory("android.intent.category.DEFAULT");
-      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      intent.setDataAndType(Uri.fromFile(apkfile), "application/vnd.android.package-archive");
-      mContext.startActivity(intent);
-      dialog.dismiss();
+
+//      这里改为静默升级了
+     new  ApkManager(mContext).install(savePath+saveFileName);
+
+
+//      LogUtils.i("apk path:"+saveFileName);
+//      Intent intent = new Intent();
+//      intent.setAction("android.intent.action.VIEW");
+//      intent.addCategory("android.intent.category.DEFAULT");
+//      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//      intent.setDataAndType(Uri.fromFile(apkfile), "application/vnd.android.package-archive");
+//      mContext.startActivity(intent);
+//      dialog.dismiss();
 
    }
 
@@ -157,25 +166,26 @@ private static final String saveFileName ="launcher.apk";
     **/
    public  void showDialog(final String downApkUrl,String message) {
       LogUtils.d("down load url:"+downApkUrl);
-
-      final CommonDialog dialog = new CommonDialog(mContext);
-      dialog.setMessage("这是一个自定义Dialog。")
-//              .setImageResId(R.mipmap.update) // 设置提示框的图标
-              .setTitle("新版本升级")
-              .setMessage(message)
-              .setSingle(true).setOnClickBottomListener(new CommonDialog.OnClickBottomListener() {
-         @Override
-         public void onPositiveClick() {
-            dialog.dismiss();
-            startUpload(downApkUrl);//下载最新的版本程序
-         }
-
-         @Override
-         public void onNegtiveClick() {
-            dialog.dismiss();
-            startUpload(downApkUrl);//下载最新的版本程序
-         }
-      }).show();
+      //强行升级
+      startUpload(downApkUrl);//下载最新的版本程序
+//      final CommonDialog dialog = new CommonDialog(mContext);
+//      dialog.setMessage("这是一个自定义Dialog。")
+////              .setImageResId(R.mipmap.update) // 设置提示框的图标
+//              .setTitle("新版本升级")
+//              .setMessage(message)
+//              .setSingle(true).setOnClickBottomListener(new CommonDialog.OnClickBottomListener() {
+//         @Override
+//         public void onPositiveClick() {
+//            dialog.dismiss();
+//            startUpload(downApkUrl);//下载最新的版本程序
+//         }
+//
+//         @Override
+//         public void onNegtiveClick() {
+//            dialog.dismiss();
+//            startUpload(downApkUrl);//下载最新的版本程序
+//         }
+//      }).show();
 
 
    }

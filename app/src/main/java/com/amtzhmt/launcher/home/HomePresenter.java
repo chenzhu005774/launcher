@@ -41,7 +41,9 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -49,6 +51,9 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.amtzhmt.launcher.util.utils.CheckNet.getMacDefault;
+import static com.amtzhmt.launcher.util.utils.CheckNet.invokeSystem;
 
 /**
  * MVPPlugin
@@ -438,7 +443,70 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
     public void getPageInfo() {
         CustomerInfoDB customerInfoDB = new CustomerInfoDB(mView.getContext());
         List<CustomerEntity> list = customerInfoDB.getAllObject();
-        if(list.size()==0){
+        if(list.size()==0) {
+            //TODO 这里有个逻辑漏洞，如果开机没网去设置设置了网络后
+            //TODO 不按返回直接按首页到首页来，这里是没有账号的
+            //TODO 所以这里要重新绑定mac获取账号登录得到账号信息，用来拿首页的数据
+            Api.getDefault().bindMacToAccount(invokeSystem("ro.mac","-1")).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+                        String result = response.body().string();
+                        JSONObject jSONObject = new JSONObject(result);
+                        final String iptvaccount = jSONObject.getString("data");
+
+                        Map<String, String> hashMap = new HashMap();
+                        hashMap.put("iptvAccount", iptvaccount);
+                        hashMap.put("mac", getMacDefault(mView.getContext()));
+                        hashMap.put("password", "123456");
+                        Api.getDefault().login(hashMap).enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                try {
+                                    String result = response.body().string();
+                                    JSONObject jSONObject = new JSONObject(result);
+                                    String orgCode = jSONObject.getJSONObject("data").getString("orgCode");
+//                               String customerCode=jSONObject.getJSONObject("data").getString("customerCode");
+//                                这里全部改为orgcode
+                                    String customerCode=jSONObject.getJSONObject("data").getString("orgCode");
+                                    //登录成功后 将他存入本地mysql
+                                    CustomerInfoDB customerInfoDB = new CustomerInfoDB(mView.getContext());
+                                    CustomerEntity customerEntity = new CustomerEntity();
+                                    customerEntity.setName(iptvaccount);
+                                    customerEntity.setPwd("123456");
+                                    customerEntity.setCode(customerCode);
+                                    customerEntity.setOrgcode(orgCode);
+                                    customerEntity.setMac(invokeSystem("ro.mac","-1"));
+                                    customerInfoDB.saveObject(customerEntity);
+                                    //这里拿到了账号信息后再去重新获取
+                                    getPageInfo();
+
+                                } catch ( Exception e) {
+                                    e.printStackTrace();
+                                    LogUtils.showDialog( mView.getContext(),"直接到首页无账号,登录解析异常",null);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                LogUtils.showDialog( mView.getContext(),"直接到首页无账号,绑定解析异常1",null);
+                            }
+                        });
+
+
+                    } catch ( Exception e) {
+                        e.printStackTrace();
+                        LogUtils.showDialog( mView.getContext(),"直接到首页无账号,绑定解析异常",null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    LogUtils.showDialog( mView.getContext(),"直接到首页无账号,绑定解析异常2",null);
+                }
+
+            });
+
             return;
         }
         CustomerEntity customerEntity =list.get(0);

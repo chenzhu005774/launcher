@@ -46,6 +46,12 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         parentlayout  =  (RelativeLayout)findViewById(R.id.root);
+
+        //升级
+        mPresenter.getUpdateApkinfo(LogUtils.getVersionCode(this));
+        //系统升级
+        mPresenter.getUpdateSysinfo(android.os.Build.VERSION.INCREMENTAL);
+
         Intent intent =getIntent();
         //getXxxExtra方法获取Intent传递过来的数据
         String data =null;
@@ -59,15 +65,15 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
             result =data;
             getPageSuccess(data);
         }else {
+            LogUtils.i("chenzhu--><直接拉起了首页键，所以重新请求，有可能会出现没账号");
             // 直接拉起首页那么 也可以
-            LogUtils.i("chenzhu--><重新请求");
-            mPresenter.getPageInfo();
+            //TODO 这里有个逻辑漏洞，如果开机没网去设置设置了网络后
+            //TODO 不按返回直接到首页来，这里是没有账号的
+            //TODO 这里可能要重走一遍登录流程。。。。
+             mPresenter.getPageInfo();
         }
-        mPresenter.startClien(this); //开启心跳 连接
-        //升级
-        mPresenter.getUpdateApkinfo(LogUtils.getVersionCode(this));
-        //系统升级
-        mPresenter.getUpdateSysinfo(android.os.Build.VERSION.INCREMENTAL);
+
+
     }
 
     @Override
@@ -79,6 +85,8 @@ public class HomeActivity extends MVPBaseActivity<HomeContract.View, HomePresent
         LogUtils.showDialog(this,"this APK version:"+versioncode+" 基带版本："+android.os.Build.VERSION.INCREMENTAL+
                 ", VERSION.MAC: " + mPresenter.invokeSystem("ro.mac","-1"));
         PLAYSTATUS = Constant.PLAY;
+        //开启心跳 连接
+        mPresenter.startClien(this);
     }
 
     @Override

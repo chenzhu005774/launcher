@@ -90,6 +90,10 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
      */
     private void addWeb(String url) {  // 重点在这里，每次都新的URL都会创建一个WebView实例，添加到容器中
         final WebView mWeb = new WebView(this);
+
+
+
+
         mWeb.setVisibility(View.INVISIBLE);
 
 //        mWeb.setLayerType(View.LAYER_TYPE_HARDWARE,null);//开启硬件加速
@@ -127,6 +131,9 @@ public class WebviewActivity extends MVPBaseActivity<WebviewContract.View, Webvi
         //添加js接口，指明供js调用的对象和名称
         mWeb.addJavascriptInterface(this, "MediaPlayer");
         mWeb.loadUrl(url);
+
+        mWeb.clearHistory(); // 清除
+
         webViews.add(mWeb);
         contentContainer.addView(mWeb);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(

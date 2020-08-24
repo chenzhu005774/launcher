@@ -72,7 +72,7 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
 
             @Override
             public int compare(ChannelEntity o1, ChannelEntity o2) {
-                // 按照学生的年龄进行升序排列
+                // 按照频道号升序排列
                 if (Integer.valueOf(o1.getNum()) > Integer.valueOf(o2.getNum())) {
                     return 1;
                 }
@@ -162,15 +162,18 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (channelEntities.size()==0){
-            return true;
-        }
+
         if (isinitSuccess){
             LogUtils.i("onkey:"+keyCode);
           //如果准备完毕那么上下键就是切台
             if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER||keyCode == KeyEvent.KEYCODE_ENTER) {
                 return true;
             }else  if ( keyCode == KeyEvent.KEYCODE_DPAD_UP||keyCode==166){
+
+                if (channelEntities.size()==0){
+                    return true;
+                }
+
                 channelIndex+=1;
                 if (channelIndex>totalNum-1){
                     channelIndex=0;
@@ -180,6 +183,9 @@ public class ChannelplayActivity extends MVPBaseActivity<ChannelplayContract.Vie
                 mPresenter.timeSend(channelNumtxt);
                 return true;
             }else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN||keyCode==167){
+                if (channelEntities.size()==0){
+                    return true;
+                }
                 channelIndex-=1;
                 if (channelIndex<0){
                     channelIndex=totalNum-1;
